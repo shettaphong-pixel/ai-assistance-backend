@@ -60,21 +60,26 @@ function validateAI(obj) {
 
 /* ---------- Gemini ---------- */
 async function callGemini(prompt) {
-  const url =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
-    GEMINI_API_KEY;
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
+  const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY;
 
   const response = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }]
-    }),
-    signal: controller.signal
+      contents: [{ parts: [{ text: prompt }] }],
+      // บังคับให้ตอบเป็น JSON (ถ้า API version รองรับ)
+      generationConfig: {
+        responseMimeType: "application/json"
+      }
+    })
   });
+
+  const data = await response.json();
+  let text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+  // ลบส่วนเกินเผื่อโมเดลแถมมา
+  text = text.trim().replace(/^
+http://googleusercontent.com/immersive_entry_chip/0
 
   clearTimeout(timeout);
 
