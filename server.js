@@ -55,26 +55,28 @@ async function callGemini(prompt) {
   const data = await response.json();
   let text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-  // ✅ STEP 1: ตัด ```json หรือ ``` ออก ถ้ามี
+  // ✅ clean code block
   text = text.trim();
   if (text.startsWith("```")) {
     text = text.replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
   }
 
-  // ✅ STEP 2: ลอง parse JSON
+  // ✅ 1) พยายาม parse เป็น JSON
   try {
-    return JSON.parse(text);
-  } catch (err) {
-    // ✅ STEP 3: fallback ที่ยังส่งข้อมูลให้ frontend ใช้ได้
+    const json = JSON.parse(text);
+    return json;
+  } catch {
+    // ✅ 2) ถ้าไม่ใช่ JSON → ถือว่าเป็น chat ปกติ
     return {
       type: "chat",
       intent: "none",
       confidence: 0,
       data: {},
-      message: text || "AI ไม่สามารถประมวลผลได้"
+      message: text
     };
   }
 }
+
 
 /* --------- API Endpoint --------- */
 app.post("/api/ai", async (req, res) => {
