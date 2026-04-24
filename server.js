@@ -38,11 +38,11 @@ ${userText}
 `;
 }
 
-/* --------- Call Gemini (AI Studio) --------- */
+// --------- Call Gemini (AI Studio) ---------
 async function callGemini(prompt) {
   const url =
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
-    GEMINI_API_KEY;
+    process.env.GEMINI_API_KEY;
 
   const response = await fetch(url, {
     method: "POST",
@@ -53,12 +53,19 @@ async function callGemini(prompt) {
   });
 
   const data = await response.json();
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  let text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-  // บังคับให้ได้ JSON เสมอ
+  // ✅ STEP 1: ตัด ```json หรือ ``` ออก ถ้ามี
+  text = text.trim();
+  if (text.startsWith("```")) {
+    text = text.replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  }
+
+  // ✅ STEP 2: ลอง parse JSON
   try {
     return JSON.parse(text);
-  } catch {
+  } catch (err) {
+    // ✅ STEP 3: fallback ที่ยังส่งข้อมูลให้ frontend ใช้ได้
     return {
       type: "chat",
       intent: "none",
