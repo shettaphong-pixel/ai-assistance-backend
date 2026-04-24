@@ -6,11 +6,14 @@ import cors from "cors";
 import fetch from "node-fetch";
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: true }));
 app.use(express.json());
 
-// API KEY จะถูกตั้งค่าใน Cloud Environment (ไม่อยู่ใน GitHub)
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+if (!GEMINI_API_KEY) {
+  console.error("❌ Missing GEMINI_API_KEY");
+  process.exit(1);
+}
 
 /* --------- Prompt Builder (AI Layer) --------- */
 function buildAIPrompt(userText) {
@@ -38,11 +41,11 @@ ${userText}
 `;
 }
 
-// --------- Call Gemini (AI Studio) ---------
+/* --------- Call Gemini (AI Studio) --------- */
 async function callGemini(prompt) {
   const url =
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
-    process.env.GEMINI_API_KEY;
+    GEMINI_API_KEY;
 
   const response = await fetch(url, {
     method: "POST",
@@ -55,28 +58,25 @@ async function callGemini(prompt) {
   const data = await response.json();
   let text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-  // ✅ clean code block
+  // clean markdown code block
   text = text.trim();
   if (text.startsWith("```")) {
     text = text.replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
   }
 
-  // ✅ 1) พยายาม parse เป็น JSON
+  // try JSON
   try {
-    const json = JSON.parse(text);
-    return json;
+    return JSON.parse(text);
   } catch {
-    // ✅ 2) ถ้าไม่ใช่ JSON → ถือว่าเป็น chat ปกติ
     return {
       type: "chat",
       intent: "none",
       confidence: 0,
       data: {},
-      message: text
+      message: text || "AI ไม่สามารถประมวลผลได้"
     };
   }
 }
-
 
 /* --------- API Endpoint --------- */
 app.post("/api/ai", async (req, res) => {
@@ -88,7 +88,6 @@ app.post("/api/ai", async (req, res) => {
 
     const prompt = buildAIPrompt(userText);
     const aiResult = await callGemini(prompt);
-
     res.json(aiResult);
   } catch (err) {
     console.error(err);
@@ -96,6 +95,12 @@ app.post("/api/ai", async (req, res) => {
   }
 });
 
+/* --------- Health Check --------- */
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
 app.listen(3000, () => {
   console.log("✅ AI Backend running on port 3000");
 });
+``
