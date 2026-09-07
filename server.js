@@ -26,13 +26,14 @@ if (!GEMINI_API_KEY) {
 
 function buildAIPrompt(userText) {
   return `
-${sessionPrompt}
+${SESSION_PROMPT}
 
-ผู้ใช้:
+คำถาม:
 ${userText}
 `;
 }
-``
+
+
 const SESSION_PROMPT = `
 คุณคือ QA Copilot ขององค์กร
 
