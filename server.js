@@ -169,7 +169,7 @@ async function callGroq(prompt) {
     }
   );
 
-  // ===========================
+// ===========================
 // Groq Qwen API
 // ===========================
 async function callQwen(prompt) {
@@ -226,7 +226,7 @@ async function callAI(prompt) {
     );
     try {
       console.log("Fallback To Qwen");
-      return await callQwen(prompt);
+      return await callGroq(prompt);
     }
     catch (groqError) {
       console.error(
