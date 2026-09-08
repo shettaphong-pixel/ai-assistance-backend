@@ -3,8 +3,36 @@
 
 import express from "express";
 import cors from "cors";
+import { createClient } from "@supabase/supabase-js";
 
 const app = express();
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
+
+async function getManual(userText) {
+
+  const { data, error } = await supabase
+    .from("manuals")
+    .select("*");
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data;
+}
+
+app.get("/manuals", async (req, res) => {
+
+  const manuals = await getManual();
+
+  res.json(manuals);
+
+});
 
 app.use(cors());
 app.use(express.json());
