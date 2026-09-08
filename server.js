@@ -144,7 +144,7 @@ async function callGemini(prompt) {
 // ===========================
 // Groq GPT API
 // ===========================
-async function callGroq(prompt) {
+async function callGPT(prompt) {
 
   const response = await fetch(
     "https://api.groq.com/openai/v1/chat/completions",
@@ -225,19 +225,29 @@ async function callAI(prompt) {
       geminiError.message
     );
     try {
-      console.log("Fallback To Qwen");
-      return await callQwen(prompt);
-    }
-    catch (groqError) {
-      console.error(
-        "Qwen Failed:",
+      console.log("Fallback To GPT");
+      return await callGPT(prompt);
+      }
+      catch (groqError) {
+        console.error(
+        "GPT Failed:",
         groqError.message
-      );
+        );
+        try {
+            console.log("Fallback To Qwen");
+            return await callQwen(prompt);
+            }
+            catch (groqError) {
+              console.error(
+              "Qwen Failed:",
+              groqError.message
+              );
       throw new Error(
         "AI Service Unavailable"
       );
     }
   }
+}
 }
 
 // ===========================
