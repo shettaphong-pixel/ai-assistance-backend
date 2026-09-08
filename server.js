@@ -156,11 +156,11 @@ async function callGroq(prompt) {
       },
       body: JSON.stringify(
         {
-        "model": "meta-llama/llama-prompt-guard-2-86m",
-        "messages": [
+        model: "llama-3.3-70b-versatile",
+        messages: [
           {
-            "role": "user",
-            "content": prompt
+            role: "user",
+            content: prompt
           }
         ],
 
