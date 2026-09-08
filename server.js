@@ -29,7 +29,7 @@ async function getManuals() {
 // ===========================
 
 const GEMINI_API_KEY = process.env.GOOGLE_API_KEY;
-
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -138,8 +138,79 @@ async function callGemini(prompt) {
 
   return (
     data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-    "ไม่พบคำตอบจาก AI"
+    "ไม่พบคำตอบจาก Gemini AI"
   );
+}
+
+// ===========================
+// Groq LLama API
+// ===========================
+async function callGroq(prompt) {
+
+  const response = await fetch(
+    "https://api.groq.com/openai/v1/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+
+        temperature: 0.1
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error?.message || "Groq API Error"
+    );
+  }
+
+  return (
+    data?.choices?.[0]?.message?.content ||
+    "ไม่พบคำตอบจาก Groq"
+  );
+}
+
+// ===========================
+// Call AI API and Switching
+// ===========================
+async function callAI(prompt) {
+  try {
+    console.log("Using Gemini");
+    return await callGemini(prompt);
+  }
+  catch (geminiError) {
+    console.error(
+      "Gemini Failed:",
+      geminiError.message
+    );
+    try {
+      console.log("Fallback To Groq");
+      return await callGroq(prompt);
+    }
+    catch (groqError) {
+      console.error(
+        "Groq Failed:",
+        groqError.message
+      );
+      throw new Error(
+        "AI Service Unavailable"
+      );
+    }
+  }
 }
 
 // ===========================
@@ -183,7 +254,7 @@ app.post("/api/ai", async (req, res) => {
       });
     }
 
-    const manuals = await getManuals();
+const manuals = await getManuals();
 
 const manualContent = manuals
   .map(item => `
@@ -199,7 +270,7 @@ ${item.content}
 const prompt = buildAIPrompt(userText,manualContent);
 ``
 
-    const result = await callGemini(prompt);
+const result = await callAI(prompt);
 
     res.json({
       message: result
