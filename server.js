@@ -142,7 +142,7 @@ async function callGemini(prompt) {
 }
 
 // ===========================
-// Groq LLama API
+// Groq GPT API
 // ===========================
 async function callGroq(prompt) {
 
@@ -169,17 +169,45 @@ async function callGroq(prompt) {
     }
   );
 
+  // ===========================
+// Groq Qwen API
+// ===========================
+async function callQwen(prompt) {
+
+  const response = await fetch(
+    "https://api.groq.com/openai/v1/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify(
+        {
+        model: "qwen/qwen3.8-27b",
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+
+        temperature: 0.1
+      })
+    }
+  );
+
   const data = await response.json();
 
   if (!response.ok) {
     throw new Error(
-      data?.error?.message || "Groq API Error"
+      data?.error?.message || "Qwen API Error"
     );
   }
 
   return (
     data?.choices?.[0]?.message?.content ||
-    "ไม่พบคำตอบจาก Groq"
+    "ไม่พบคำตอบจาก Qwen"
   );
 }
 
@@ -197,12 +225,12 @@ async function callAI(prompt) {
       geminiError.message
     );
     try {
-      console.log("Fallback To Groq");
-      return await callGroq(prompt);
+      console.log("Fallback To Qwen");
+      return await callQwen(prompt);
     }
     catch (groqError) {
       console.error(
-        "Groq Failed:",
+        "Qwen Failed:",
         groqError.message
       );
       throw new Error(
