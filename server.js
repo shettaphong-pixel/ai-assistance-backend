@@ -3,14 +3,9 @@
 
 import express from "express";
 import cors from "cors";
-import { createClient } from "@supabase/supabase-js";
 
 const app = express();
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-);
 
 async function getManual(userText) {
 
@@ -42,6 +37,13 @@ app.use(express.json());
 // ===========================
 
 const GEMINI_API_KEY = process.env.GOOGLE_API_KEY;
+
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
 
 if (!GEMINI_API_KEY) {
   console.error("❌ GOOGLE_API_KEY not found");
