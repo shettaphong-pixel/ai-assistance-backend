@@ -154,13 +154,13 @@ async function callGroq(prompt) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${GROQ_API_KEY}`
       },
-      body: JSON.stringify({
-        model: "meta-llama/llama-prompt-guard-2-86m",
-
-        messages: [
+      body: JSON.stringify(
+        {
+        "model": "meta-llama/llama-prompt-guard-2-86m",
+        "messages": [
           {
-            role: "user",
-            content: prompt
+            "role": "user",
+            "content": prompt
           }
         ],
 
