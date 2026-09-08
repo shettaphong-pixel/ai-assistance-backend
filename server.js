@@ -3,34 +3,34 @@
 
 import express from "express";
 import cors from "cors";
+import { createClient } from "@supabase/supabase-js";
 
 const app = express();
 
 
-async function getManual(userText) {
+async function getManual() {
 
-  const { data, error } = await supabase
-    .from("manuals")
-    .select("*");
+const manuals = await getManuals();
+const manuals = await getManuals();
 
-  if (error) {
-    console.error(error);
-    return null;
-  }
+const manualContent = manuals
+  .map(m => `
+Application: ${m.app_name}
+Topic: ${m.topic}
+Content:
+${m.content}
+`)
+  .join("\n\n");
 
-  return data;
-}
+const prompt = `
+${SESSION_PROMPT}
 
-app.get("/manuals", async (req, res) => {
+Manual:
+${manualContent}
 
-  const manuals = await getManual();
-
-  res.json(manuals);
-
-});
-
-app.use(cors());
-app.use(express.json());
+คำถาม:
+${userText}
+`;
 
 // ===========================
 // Config
@@ -38,7 +38,6 @@ app.use(express.json());
 
 const GEMINI_API_KEY = process.env.GOOGLE_API_KEY;
 
-import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
