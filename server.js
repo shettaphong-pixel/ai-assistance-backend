@@ -168,6 +168,18 @@ async function callGPT(prompt) {
       })
     }
   );
+    const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error?.message || "GPT API Error"
+    );
+  }
+
+  return (
+    data?.choices?.[0]?.message?.content ||
+    "ไม่พบคำตอบจาก GPT"
+  );
 }
 // ===========================
 // Groq Qwen API
