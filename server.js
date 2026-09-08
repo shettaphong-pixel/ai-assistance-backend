@@ -45,10 +45,18 @@ if (!GEMINI_API_KEY) {
 // Prompt Builder
 // ===========================
 
-function buildAIPrompt(userText) {
+function buildAIPrompt(userText,manualContent) {
   return `
+
 ${SESSION_PROMPT}
 
+====================
+ข้อมูลจาก Manual
+====================
+${manualContent}
+====================
+คำถามผู้ใช้
+====================
 คำถาม:
 ${userText}
 `;
@@ -162,7 +170,24 @@ app.post("/api/ai", async (req, res) => {
       });
     }
 
-    const prompt = buildAIPrompt(userText);
+    const manuals = await getManuals();
+
+const manualContent = manuals
+  .map(item => `
+Application: ${item.app_name}
+
+Topic: ${item.topic}
+
+Content:
+${item.content}
+`)
+  .join("\n\n");
+
+const prompt = buildAIPrompt(
+  userText,
+  manualContent
+);
+``
 
     const result = await callGemini(prompt);
 
