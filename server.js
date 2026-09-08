@@ -183,10 +183,7 @@ ${item.content}
 `)
   .join("\n\n");
 
-const prompt = buildAIPrompt(
-  userText,
-  manualContent
-);
+const prompt = buildAIPrompt(userText,manualContent);
 ``
 
     const result = await callGemini(prompt);
