@@ -155,7 +155,7 @@ async function callGroq(prompt) {
         Authorization: `Bearer ${GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: "openai/gpt-oss-120b",
+        model: "meta-llama/llama-prompt-guard-2-86m",
 
         messages: [
           {
