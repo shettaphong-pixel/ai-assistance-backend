@@ -8,29 +8,19 @@ import { createClient } from "@supabase/supabase-js";
 const app = express();
 
 
-async function getManual() {
+async function getManuals() {
 
-const manuals = await getManuals();
-const manuals = await getManuals();
+  const { data, error } = await supabase
+    .from("manuals")
+    .select("*");
 
-const manualContent = manuals
-  .map(m => `
-Application: ${m.app_name}
-Topic: ${m.topic}
-Content:
-${m.content}
-`)
-  .join("\n\n");
+  if (error) {
+    console.error(error);
+    return [];
+  }
 
-const prompt = `
-${SESSION_PROMPT}
-
-Manual:
-${manualContent}
-
-คำถาม:
-${userText}
-`;
+  return data;
+};
 
 // ===========================
 // Config
@@ -151,6 +141,14 @@ app.get("/", (req, res) => {
 // ===========================
 // Chat Endpoint
 // ===========================
+
+app.get("/manuals", async (req, res) => {
+
+  const manuals = await getManuals();
+
+  res.json(manuals);
+
+});
 
 app.post("/api/ai", async (req, res) => {
   try {
