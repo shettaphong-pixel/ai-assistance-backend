@@ -15,7 +15,7 @@ let { data: manuals } = await supabase
 .from("manuals")
 .select("*")
 .or(
-`topic.ilike.%${*userText}%,keywords.ilike.%${userTe*t}%`
+`topic.ilike.%${userText}%,keywords.ilike.%${userText}%`
 )
 .limit(5);
 // ถ้าหาไม่เจอเลย
