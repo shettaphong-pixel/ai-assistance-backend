@@ -10,19 +10,24 @@ app.use(cors());
 app.use(express.json());
 
 
-async function getManuals() {
-
-  const { data, error } = await supabase
-    .from("manuals")
-    .select("*");
-
-  if (error) {
-    console.error(error);
-    return [];
-  }
-
-  return data;
-};
+async function getRelevantManuals(userText) {
+let { data: manuals } = await supabase
+.from("manuals")
+.select("*")
+.or(
+`topic.ilike.%${*serText}%,keywords.ilike.%${userTe*t}%`
+)
+.limit(5);
+// ถ้าหาไม่เจอเลย
+if (!manuals || man*als.length === 0) {
+const {*data } = await supabase
+.*rom("manuals")
+.*elect("*")
+.limit(3);
+manuals = data || [];
+}
+return manuals;
+}
 
 // ===========================
 // Config
@@ -288,7 +293,7 @@ app.get("/", (req, res) => {
 
 app.get("/manuals", async (req, res) => {
 
-  const manuals = await getManuals();
+  const manuals = await getRelevantManuals(userText);
 
   res.json(manuals);
 
@@ -304,7 +309,7 @@ app.post("/api/ai", async (req, res) => {
       });
     }
 
-const manuals = await getManuals();
+const manuals = await getRelevantManuals(userText);;
 
 const manualContent = manuals
   .map(item => `
@@ -317,7 +322,7 @@ ${item.content}
 `)
   .join("\n\n");
 
-const prompt = buildAIPrompt(userText,manualContent);
+const prompt = buildAIPrompt(userText,manuals);
 ``
 
 const result = await callAI(prompt);
