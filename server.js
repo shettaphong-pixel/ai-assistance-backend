@@ -308,14 +308,15 @@ const manuals = await getManuals();
 
 const manualContent = manuals
   .map(item => `
-Application: ${item.app_name}
-
 Topic: ${item.topic}
+
+Keywords: ${item.keywords}
 
 Content:
 ${item.content}
 `)
-  .join("\n\n");
+  .join("\n\n")
+;
 
 const prompt = buildAIPrompt(userText,manualContent);
 ``
