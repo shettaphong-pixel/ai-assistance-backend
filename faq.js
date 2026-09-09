@@ -215,4 +215,4 @@ function findFAQ(text) {
 
 }
 
-export default FAQS;
+//export default FAQS;
