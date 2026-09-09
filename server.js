@@ -10,23 +10,33 @@ app.use(cors());
 app.use(express.json());
 
 
-async function getRelevantManuals(userText) {
-let { data: manuals } = await supabase
-.from("manuals")
-.select("*")
-.or(
-`topic.ilike.%${userText}%,keywords.ilike.%${userText}%`
-)
-.limit(5);
-// ถ้าหาไม่เจอเลย
-if (!manuals || man*als.length === 0) {
-const {*data } = await supabase
-.*rom("manuals")
-.*elect("*")
-.limit(3);
-manuals = data || [];
-}
-return manuals;
+async function getManuals(userText) {
+  try {
+    let { data: manuals, error } = await supabase
+      .from("manuals")
+      .select("*")
+      .or(
+        `topic.ilike*%${userText}%,keywords.ilike.%${us*rText}%`
+      )
+      .limit(3);
+*    if (error) {
+      console.err*r("Search manuals error:", error);*    }
+
+    // ถ้าหาไม่เจอเลย ให้ดึ*ข้อมูลสำรองมา 3 รายการ
+    if (!ma*uals || manuals.length === 0) {
+  *   const { data: fallbackData } = await supabase
+        .from("manuals")
+        .select("*")
+        .limit(3);
+
+      manuals = fallbackData || [];
+    }
+
+    return manuals;
+  } catch (err) {
+    console.error("getManuals error:", err);
+    return [];
+  }
 }
 
 // ===========================
@@ -293,7 +303,7 @@ app.get("/", (req, res) => {
 
 app.get("/manuals", async (req, res) => {
 
-  const manuals = await getRelevantManuals(userText);
+  const manuals = await getManuals(userText);
 
   res.json(manuals);
 
@@ -309,7 +319,7 @@ app.post("/api/ai", async (req, res) => {
       });
     }
 
-const manuals = await getRelevantManuals(userText);;
+const manuals = await getManuals(userText);;
 
 const manualContent = manuals
   .map(item => `
