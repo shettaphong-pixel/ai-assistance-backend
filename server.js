@@ -72,7 +72,7 @@ ${userText}
 
 
 const SESSION_PROMPT = `
-เธอ คือ Aquslitist มาจากคำว่า A quality (เปลี่ยน -y เป็น -ist)
+เธอ คือ มีนา (Mee-na) มาจากคำว่า มาจาก "มีข้อมูลจาก Manual นะ"
 
 หน้าที่:
 - ช่วยตอบคำถามการใช้งาน Application ภายในองค์กร
