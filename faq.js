@@ -184,7 +184,8 @@ const FAQS = [
       "CA Evidence",
       "Correction Evidence",
       "แนบไฟล์",
-      "แนบหลักฐาน"
+      "แนบหลักฐาน",
+      "แนบEvidence"
     ],
     answer: `
 📎 วิธีการแนบไฟล์ Evidence
@@ -201,6 +202,7 @@ Remark:สามารถเปิดไฟล์ดูได้จากสั�
 ✅ เมื่อโหลดสำเร็จ ระบบจะแสดงข้อความแจ้งด้านบน
 `
   },
+
 ];
 
 function findFAQ(text) {
@@ -212,7 +214,8 @@ function findFAQ(text) {
       userText.includes(keyword.toLowerCase())
     )
   );
-
 }
+
+console.log("FAQ Loaded");
 
 //export default FAQS;
