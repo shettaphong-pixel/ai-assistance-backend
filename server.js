@@ -327,6 +327,11 @@ ${item.content}
 ;
 
 const prompt = buildAIPrompt(userText,manualContent);
+console.log("Prompt Length:", prompt.length);
+const estimatedTokens =
+  Math.ceil(prompt.length / 4);
+
+console.log("Estimated Tokens:", estimatedTokens);
 ``
 
 const result = await callAI(prompt);
