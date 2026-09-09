@@ -10,34 +10,19 @@ app.use(cors());
 app.use(express.json());
 
 
-async function getManuals(userText) {
-  try {
-    let { data: manuals, error } = await supabase
-      .from("manuals")
-      .select("*")
-      .or(
-        `topic.ilike*%${userText}%,keywords.ilike.%${us*rText}%`
-      )
-      .limit(3);
-*    if (error) {
-      console.err*r("Search manuals error:", error);*    }
+async function getManuals() {
 
-    // ถ้าหาไม่เจอเลย ให้ดึ*ข้อมูลสำรองมา 3 รายการ
-    if (!ma*uals || manuals.length === 0) {
-  *   const { data: fallbackData } = await supabase
-        .from("manuals")
-        .select("*")
-        .limit(3);
+  const { data, error } = await supabase
+    .from("manuals")
+    .select("*");
 
-      manuals = fallbackData || [];
-    }
-
-    return manuals;
-  } catch (err) {
-    console.error("getManuals error:", err);
+  if (error) {
+    console.error(error);
     return [];
   }
-}
+
+  return data;
+};
 
 // ===========================
 // Config
@@ -303,7 +288,7 @@ app.get("/", (req, res) => {
 
 app.get("/manuals", async (req, res) => {
 
-  const manuals = await getManuals(userText);
+  const manuals = await getManuals();
 
   res.json(manuals);
 
@@ -319,7 +304,7 @@ app.post("/api/ai", async (req, res) => {
       });
     }
 
-const manuals = await getManuals(userText);;
+const manuals = await getManuals();
 
 const manualContent = manuals
   .map(item => `
@@ -332,7 +317,7 @@ ${item.content}
 `)
   .join("\n\n");
 
-const prompt = buildAIPrompt(userText,manuals);
+const prompt = buildAIPrompt(userText,manualContent);
 ``
 
 const result = await callAI(prompt);
