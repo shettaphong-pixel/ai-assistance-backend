@@ -9,12 +9,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//add
+let manualsCache = [];
+
+async function refreshManuals() {
+   manualsCache = await getManuals();
+}
+//finish
 
 async function getManuals() {
 
   const { data, error } = await supabase
     .from("manuals")
-    .select("*");
+    .select("*")
+    .limit(3);//add trial
 
   if (error) {
     console.error(error);
