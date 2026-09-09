@@ -302,6 +302,26 @@ app.get("/manuals", async (req, res) => {
 
 });
 
+import { findFAQ } from "./faqSearch.js";
+
+async function sendMessage() {
+
+  const userText = input.value;
+
+  const faqResult = findFAQ(userText);
+
+  if (faqResult) {
+
+    addMessage("bot", faqResult.answer);
+
+    console.log("FAQ HIT");
+    return;
+  }
+
+  console.log("CALL AI");
+
+  // เรียก Backend ต่อเมื่อไม่พบ FAQ
+// AI response
 app.post("/api/ai", async (req, res) => {
   try {
     const { userText } = req.body;
@@ -349,8 +369,10 @@ const result = await callAI(prompt);
     });
 
   }
-});
+});//finish AI response
 
+}
+   
 // ===========================
 // Start Server
 // ===========================
