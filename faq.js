@@ -201,8 +201,18 @@ Remark:สามารถเปิดไฟล์ดูได้จากสั�
 ✅ เมื่อโหลดสำเร็จ ระบบจะแสดงข้อความแจ้งด้านบน
 `
   },
-
-
 ];
+
+function findFAQ(text) {
+
+  const userText = text.toLowerCase();
+
+  return FAQS.find(item =>
+    item.keywords.some(keyword =>
+      userText.includes(keyword.toLowerCase())
+    )
+  );
+
+}
 
 export default FAQS;
