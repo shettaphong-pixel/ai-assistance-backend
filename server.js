@@ -61,6 +61,9 @@ const historyText =
          `${msg.role}: ${msg.content}`
       )
       .join("\n");
+
+   console.log("=== PROMPT HISTORY ===");
+   console.log(chatHistory);
    return `
 
 ${SESSION_PROMPT}
@@ -79,6 +82,8 @@ ${historyText}
 คำถาม:
 ${userText}
 `;
+console.log("=== FINAL PROMPT ===");
+console.log(prompt);
 }
 
 
@@ -323,7 +328,11 @@ app.post("/api/ai", async (req, res) => {
           userText,
           chatHistory = [] 
           } = req.body;
+
+     console.log("=== CHAT HISTORY ===");
+     console.log(chatHistory);
      //finish add
+     
     if (!userText || userText.trim() === "") {
       return res.status(400).json({
         error: "Missing userText"
