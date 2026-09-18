@@ -53,7 +53,7 @@ if (!GEMINI_API_KEY) {
 // Prompt Builder
 // ===========================
 
-function buildAIPrompt(userText,manualContent) {
+function buildAIPrompt(userText,chatHistory,manualContent) {
   return `
 
 ${SESSION_PROMPT}
