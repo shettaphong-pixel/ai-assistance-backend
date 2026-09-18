@@ -53,8 +53,15 @@ if (!GEMINI_API_KEY) {
 // Prompt Builder
 // ===========================
 
-function buildAIPrompt(userText,chatHistory,manualContent) {
-  return `
+function buildAIPrompt(userText,chatHistory = [],manualContent) 
+{
+const historyText =
+   chatHistory
+      .map(msg =>
+         `${msg.role}: ${msg.content}`
+      )
+      .join("\n");
+   return `
 
 ${SESSION_PROMPT}
 
@@ -65,9 +72,7 @@ ${manualContent}
 ====================
 ประวัติการสนทนา
 ====================
-${chatHistory
-  .map(msg => `${msg.role}: ${msg.content}`)
-  .join("\n")}
+${historyText}
 ====================
 คำถามผู้ใช้
 ====================
@@ -313,8 +318,17 @@ app.get("/manuals", async (req, res) => {
 // AI response
 app.post("/api/ai", async (req, res) => {
   try {
-    const { userText } = req.body;
-
+    //add
+     const { 
+          userText,
+          chatHistory = [] 
+          } = req.body;
+    const prompt =
+       buildAIPrompt(
+          userText,
+          chatHistory
+         );
+     //finish add
     if (!userText || userText.trim() === "") {
       return res.status(400).json({
         error: "Missing userText"
