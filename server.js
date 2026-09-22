@@ -389,7 +389,12 @@ const estimatedTokens =
   Math.ceil(prompt.length / 4);
 
 console.log("Estimated Tokens:", estimatedTokens);
-``
+console.log("keywords", keywords);
+console.log("relatedManuals", relatedManuals.length);
+console.log(
+  relatedManuals.map(x => x.app_name)
+);
+     ``
 
 const result = await callAI(prompt);
 
