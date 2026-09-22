@@ -342,7 +342,7 @@ app.post("/api/ai", async (req, res) => {
 const manuals = await getManuals();
 
 const keywords =
-  userQuestion.toLowerCase().split(/\s+/);
+  userText.toLowerCase().split(/\s+/);
 
 const relatedManuals = manuals.filter(item => {
 
