@@ -22,7 +22,6 @@ async function getManuals() {
   const { data, error } = await supabase
     .from("manuals")
     .select("*")
-    .limit(3);//add trial
 
   if (error) {
     console.error(error);
@@ -344,7 +343,8 @@ const manuals = await getManuals();
 const keywords =
   userText.toLowerCase().split(/\s+/);
 
-const relatedManuals = manuals.filter(item => {
+const relatedManuals = manuals
+   .filter(item => {
 
 const searchText =
       `
@@ -357,7 +357,8 @@ const searchText =
     return keywords.some(word =>
       searchText.includes(word)
     );
-});
+})
+   .slice(0,3);
 
 let manualContent = "";
      if (relatedManuals.length === 0) {
