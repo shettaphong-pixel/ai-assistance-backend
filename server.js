@@ -358,8 +358,17 @@ const searchText =
       searchText.includes(word)
     );
 });
-     
-const manualContent = relatedManuals
+
+let manualContent = "";
+     if (relatedManuals.length === 0) {
+        manualContent = `
+No matching manual found.
+Try to answer based on chat history and general knowledge.
+If you are not confident, suggest the closest available application or manual topic.
+`;
+} 
+     else {
+      manualContent = relatedManuals
   .map(item => `
 
 App_name: ${item.app_name}
@@ -371,8 +380,8 @@ Keywords: ${item.keywords}
 Content:
 ${item.content}
 `)
-  .join("\n\n")
-;
+  .join("\n\n");
+     }
 
 const prompt = buildAIPrompt(userText,manualContent,chatHistory);
 console.log("Prompt Length:", prompt.length);
