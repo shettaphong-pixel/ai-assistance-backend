@@ -343,6 +343,14 @@ const manuals = await getManuals();
 const keywords =
   userText.toLowerCase().split(/\s+/);
 
+const extraKeywords = ["Apps","แนะนำ","recommended","recommend","Apps ปัจจุบันที่ QA เปิดให้ใช้งาน","แนะนำ","Apps ทั้งหมด","แอปพลิเคชัน","application","program","โปรแกรม"];
+
+extraKeywords.forEach(word => {
+if (userText.toLowerCase().includes(word)) {
+keywords.push(word);
+}
+});
+
 const relatedManuals = manuals
    .filter(item => {
 
