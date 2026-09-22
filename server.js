@@ -358,7 +358,7 @@ const searchText =
       searchText.includes(word)
     );
 })
-   .slice(0,3);
+;
 
 let manualContent = "";
      if (relatedManuals.length === 0) {
