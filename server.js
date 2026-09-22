@@ -341,7 +341,25 @@ app.post("/api/ai", async (req, res) => {
 
 const manuals = await getManuals();
 
-const manualContent = manuals
+const keywords =
+  userQuestion.toLowerCase().split(/\s+/);
+
+const relatedManuals = manuals.filter(item => {
+
+const searchText =
+      `
+      ${item.app_name}
+      ${item.topic}
+      ${item.keywords}
+      `
+      .toLowerCase();
+
+    return keywords.some(word =>
+      searchText.includes(word)
+    );
+});
+     
+const manualContent = relatedManuals
   .map(item => `
 
 App_name: ${item.app_name}
