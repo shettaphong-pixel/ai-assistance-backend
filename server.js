@@ -343,6 +343,9 @@ const manuals = await getManuals();
 
 const manualContent = manuals
   .map(item => `
+
+App_name: ${item.app_name}
+
 Topic: ${item.topic}
 
 Keywords: ${item.keywords}
