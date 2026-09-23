@@ -313,7 +313,7 @@ app.get("/", (req, res) => {
 async function saveAiQuestion(question, answer) {
 
   const { error } = await supabase
-    .from("ai_questions")
+    .from("ai_hits")
     .insert({
       question,
       ai_answer: answer
