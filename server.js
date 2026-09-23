@@ -307,6 +307,29 @@ app.get("/", (req, res) => {
 });
 
 // ===========================
+// Save Question from AI HIT
+// ===========================
+
+async function saveAiQuestion(question, answer) {
+
+  const { error } = await supabase
+    .from("ai_questions")
+    .insert({
+      question,
+      ai_answer: answer
+    });
+
+  if (error) {
+    console.error(
+      "Save AI Question Error:",
+      error.message
+    );
+  }
+}
+// ===========================
+
+
+// ===========================
 // Chat Endpoint
 // ===========================
 
@@ -407,6 +430,11 @@ console.log(
 
 const result = await callAI(prompt);
 
+await saveAiQuestion(
+userText,
+result
+);
+     
     res.json({
       message: result
     });
