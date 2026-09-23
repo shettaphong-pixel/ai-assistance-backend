@@ -52,7 +52,7 @@ if (!GEMINI_API_KEY) {
 // Prompt Builder
 // ===========================
 
-function buildAIPrompt(userText,manualContent,chatHistory = []) 
+function buildAIPrompt(userText,manualContent,chatHistory) 
 {
 const historyText =
    chatHistory
@@ -348,7 +348,7 @@ app.post("/api/ai", async (req, res) => {
     //add
      const { 
           userText,
-          chatHistory = [] 
+          chatHistory
           } = req.body;
 
      console.log("=== CHAT HISTORY ===");
