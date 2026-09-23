@@ -316,7 +316,7 @@ async function saveAiQuestion(question, answer) {
     .from("ai_hits")
     .insert({
       question,
-      ai_answer: answer
+      answer: answer
     });
 
   if (error) {
