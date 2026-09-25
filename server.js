@@ -61,8 +61,9 @@ const historyText =
       )
       .join("\n");
 
-   console.log("=== PROMPT HISTORY ===");
+   console.log("=== START PROMPT HISTORY ===");
    console.log(chatHistory);
+   console.log("=== FINISH PROMPT HISTORY ===");
    return `
 
 ${SESSION_PROMPT}
@@ -353,8 +354,9 @@ app.post("/api/ai", async (req, res) => {
           chatHistory
           } = req.body;
 
-     console.log("=== CHAT HISTORY ===");
+     console.log("=== START CHAT HISTORY ===");
      console.log(chatHistory);
+     console.log("=== FINISH CHAT HISTORY ===");
      //finish add
 
          // ===========================
@@ -485,6 +487,11 @@ result
       message: result
     });
 
+   console.log(
+      "Answer:",
+      result
+   );
+     
   } catch (error) {
 
     console.error("❌ AI Error:", error);
