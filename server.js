@@ -411,8 +411,11 @@ app.post("/api/ai", async (req, res) => {
 
 const manuals = await getManuals();
 
+const searchSource =
+   recentText + " " + userText;
+     
 const keywords =
-  userText.toLowerCase().split(/\s+/);
+  searchSource.toLowerCase().split(/\s+/);
 
 const extraKeywords = ["Apps","แนะนำ","recommended","recommend","Apps ปัจจุบันที่ QA เปิดให้ใช้งาน","Apps ทั้งหมด","แอปพลิเคชัน","application","program","โปรแกรม"];
 
