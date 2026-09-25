@@ -362,7 +362,7 @@ function detectIntent(userText) {
         return "GIVE_FEEDBACK";
     }
     return "NORMAL";
-}
+};
 
 const intent = detectIntent(userText);
 console.log(
