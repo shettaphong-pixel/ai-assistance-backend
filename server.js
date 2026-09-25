@@ -350,8 +350,9 @@ app.post("/api/ai", async (req, res) => {
   try {
     //add
      const { 
-          userText,
-          chatHistory
+           userText,
+           chatHistory,
+           searchSource
           } = req.body;
 
      console.log("=== START CHAT HISTORY ===");
