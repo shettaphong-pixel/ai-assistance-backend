@@ -352,7 +352,7 @@ app.post("/api/ai", async (req, res) => {
      const { 
            userText,
            chatHistory,
-           searchSource
+           recentText
           } = req.body;
 
      console.log("=== START CHAT HISTORY ===");
