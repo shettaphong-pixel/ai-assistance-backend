@@ -329,7 +329,26 @@ async function saveAiQuestion(question, answer) {
 }
 // ===========================
 
+// ===========================
+// Save feedback
+// ===========================
 
+async function saveFeedback(userText) {
+
+  const { error } = await supabase
+    .from("ai_hits")
+    .insert({
+      userText
+    });
+
+  if (error) {
+    console.error(
+      "Save AI Question Error:",
+      error.message
+    );
+  }
+}
+// ===========================
 
 
 // ===========================
@@ -401,7 +420,16 @@ app.post("/api/ai", async (req, res) => {
              "Intent:",
              intent
          );
-         
+
+if (
+    intent ===
+    "GIVE_FEEDBACK"
+){
+    await saveFeedback(
+        userText
+    );
+}
+``       
          // ===========================
      
     if (!userText || userText.trim() === "") {
@@ -426,22 +454,48 @@ keywords.push(word);
 }
 });
 
-const relatedManuals = manuals
+// ===== select manual ======
+// ==========================
+
+let relatedManuals = [];
+     if (
+    intent ===
+    "REQUEST_ADVICE"
+) {
+
+    relatedManuals = manuals
    .filter(item => {
 
 const searchText =
       `
       ${item.app_name}
       ${item.topic}
-      ${item.keywords}
       `
       .toLowerCase();
 
     return keywords.some(word =>
       searchText.includes(word)
     );
-})
-;
+})       
+}
+else {
+
+    relatedManuals = manuals
+      .filter(item => {
+          const searchText =
+            `
+            ${item.app_name}
+            ${item.topic}
+            ${item.keywords}
+            `
+            .toLowerCase();
+          return keywords.some(word =>
+              searchText.includes(word)
+          );
+      })
+      .slice(0, 5)
+}
+// =========== Finish select manual
 
 let manualContent = "";
      if (relatedManuals.length === 0) {
