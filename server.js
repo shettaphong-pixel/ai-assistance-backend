@@ -328,6 +328,50 @@ async function saveAiQuestion(question, answer) {
 }
 // ===========================
 
+// ===========================
+// Clarify UesrText intent
+// ===========================
+
+function detectIntent(userText) {
+    const text = userText.toLowerCase();
+    const recommendPatterns = [
+        "ช่วยแนะนำ",
+        "ขอคำแนะนำ",
+        "มีอะไรแนะนำ",
+        "แนะนำหน่อย",
+        "แนะนำให้หน่อย"
+    ];
+    const feedbackPatterns = [
+        "อยากแนะนำ",
+        "ขอแนะนำ",
+        "ข้อเสนอแนะ",
+        "เสนอแนะ"
+    ];
+    if (
+        recommendPatterns.some(p =>
+            text.includes(p)
+        )
+    ) {
+        return "REQUEST_ADVICE";
+    }
+    if (
+        feedbackPatterns.some(p =>
+            text.includes(p)
+        )
+    ) {
+        return "GIVE_FEEDBACK";
+    }
+    return "NORMAL";
+}
+
+const intent = detectIntent(userText);
+console.log(
+    "Intent:",
+    intent
+);
+
+// ===========================
+
 
 // ===========================
 // Chat Endpoint
