@@ -49,6 +49,28 @@ if (!GEMINI_API_KEY) {
 }
 
 // ===========================
+// Save feedback
+// ===========================
+
+async function saveFeedback(userText,intent) {
+
+  const { error } = await supabase
+    .from("ai_hits")
+    .insert({
+      userText,
+      intent
+    });
+
+  if (error) {
+    console.error(
+      "Save AI Question Error:",
+      error.message
+    );
+  }
+}
+// ===========================
+
+// ===========================
 // Prompt Builder
 // ===========================
 
@@ -386,27 +408,7 @@ async function saveAiQuestion(question, answer,intent) {
 }
 // ===========================
 
-// ===========================
-// Save feedback
-// ===========================
 
-async function saveFeedback(userText,intent) {
-
-  const { error } = await supabase
-    .from("ai_hits")
-    .insert({
-      userText,
-      intent
-    });
-
-  if (error) {
-    console.error(
-      "Save AI Question Error:",
-      error.message
-    );
-  }
-}
-// ===========================
 
 
 // ===========================
