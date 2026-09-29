@@ -74,7 +74,7 @@ async function saveFeedback(userText,intent) {
 // Prompt Builder
 // ===========================
 
-function buildAIPrompt(userText,manualContent,chatHistory) 
+async function buildAIPrompt(userText,manualContent,chatHistory) 
 {
 const historyText =
    chatHistory
@@ -98,7 +98,7 @@ chatHistory
 ?.state;
 
 if (lastState === "feedback_detail") { 
-await saveFeedback(userText);
+await saveFeedback(userText,intent);
 return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
 }   
 
@@ -115,7 +115,7 @@ const intent = detectIntent(userText);
    
 if (intent === "GIVE_FEEDBACK") {
  
-if (isFeedbackStart(userText)) {
+if (isFeedbackStart(userText,intent)) {
  
 return JSON.stringify({
 message: "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย",
@@ -123,7 +123,7 @@ state: "feedback_detail"
 });
 }
  
-await saveFeedback(userText);
+await saveFeedback(userText,intent);
  
 return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
 }   
