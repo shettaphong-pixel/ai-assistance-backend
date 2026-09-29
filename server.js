@@ -107,8 +107,6 @@ return "ขอบคุณสำหรับข้อเสนอแนะค่
 // ===========================
 // INTENT CHECK
 // ===========================
- 
-const intent = detectIntent(userText);
          
    console.log(
              "Intent:",
