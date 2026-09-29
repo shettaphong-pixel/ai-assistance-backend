@@ -631,12 +631,22 @@ userText,
 result
 );
 
-await handleMessage(
+const stateResult =
+     await handleMessage(
     userText,
     intent
 );
 
+   if(stateResult) {
     res.json({
+      message: stateResult
+    });
+         console.log(
+      "Answer:",
+      stateResult
+   );
+   }
+       res.json({
       message: result
     });
 
