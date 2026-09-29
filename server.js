@@ -436,31 +436,6 @@ app.post("/api/ai", async (req, res) => {
              return "NORMAL";
          }
 
-         const conversationState = {
-                awaitingInput: null
-               };
-     
-         const feedbackStartPatterns = [
-               "ขอเสนอแนะ",
-               "มีข้อเสนอแนะ",
-               "ขอ feedback",
-               "อยากให้ข้อเสนอแนะ",
-               "ขอแสดงความคิดเห็น",
-               "เสนอแนะหน่อย",
-               "ขอเสนออะไรหน่อย",
-               "ขอเสนอหน่อย"
-         ];
-     
-         function isFeedbackStart(text) {
-                              
-            const userText = text.toLowerCase();
-                              
-               return   feedbackStartPatterns.some(pattern =>
-                        userText.includes(pattern.toLowerCase())
-               );
-         }
-     
-     
          const intent = detectIntent(userText);
          console.log(
              "Intent:",
@@ -472,11 +447,38 @@ app.post("/api/ai", async (req, res) => {
             // =====================
             // STEP 1 : กำลังรอ Feedback อยู่
             // =====================
+
+            const conversationState = {
+                  awaitingInput: null
+            };
+
+            const feedbackStartPatterns = [
+                  "ขอเสนอแนะ",
+                  "มีข้อเสนอแนะ",
+                  "ขอ feedback",
+                  "อยากให้ข้อเสนอแนะ",
+                  "ขอแสดงความคิดเห็น",
+                  "เสนอแนะหน่อย",
+                  "ขอเสนออะไรหน่อย",
+                  "ขอเสนอหน่อย"
+            ];
+
+            function isFeedbackStart(text) {
+                              
+               const userText = text.toLowerCase();
+                              
+                  return   feedbackStartPatterns.some(pattern =>
+                        userText.includes(pattern.toLowerCase())
+               );
+            }
+            
             if (conversationState.awaitingInput === "feedback_detail") {
 
                await saveFeedback(userText);
                conversationState.awaitingInput = null;
+               console.log("Feedback complete");
                return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
+               
 
             }
 
@@ -492,22 +494,29 @@ app.post("/api/ai", async (req, res) => {
                {
  
                   conversationState.awaitingInput = "feedback_detail";
- 
+                  console.log("Start Feedback");
                   return "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย";
+
+
 
                }
 
                // กรณีให้ Feedback มาเลย
                await saveFeedback(userText);
- 
+
+               console.log("Direct Feedback");
                return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
+
+
             }
 
             // =====================
             // STEP 3 : Intent อื่น
             // =====================
- 
+
+            console.log("No Feedback");
             return "ตอบตามระบบปกติ";
+
          }
 
 ``       
