@@ -513,14 +513,7 @@ app.post("/api/ai", async (req, res) => {
                   return   feedbackStartPatterns.some(pattern =>
                         userText.includes(pattern.toLowerCase())
                );
-            }
-            
-            // === debug
-            console.log(
-                "STATE:",
-                conversationState.awaitingInput
-            );
-            // ===
+            }       
 
          //async function handleMessage(userText, intent) {
             // =====================
