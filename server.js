@@ -384,7 +384,28 @@ app.post("/api/ai", async (req, res) => {
          // ===========================
          // Clarify UesrText intent
          // ===========================
-         
+
+                  // check start feedback pattern
+                  const feedbackStartPatterns = [
+                                                    "ขอเสนอแนะ",
+                                                    "มีข้อเสนอแนะ",
+                                                    "ขอ feedback",
+                                                    "อยากให้ข้อเสนอแนะ",
+                                                    "ขอแสดงความคิดเห็น",
+                                                    "ขอเสนออะไรหน่อย",
+                                                    "ขอเสนอหน่อย"
+                                                ];
+     
+                  function isFeedbackStart(text) {
+                              
+                     const userText = text.toLowerCase();
+                              
+                        return   feedbackStartPatterns.some(pattern =>
+                                 userText.includes(pattern.toLowerCase())
+                                                             );
+                                                   }
+                  // finish check pattern
+     
          function detectIntent(userText) {
              const text = userText.toLowerCase();
              const recommendPatterns = [
