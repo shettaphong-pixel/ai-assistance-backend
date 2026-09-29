@@ -472,6 +472,13 @@ app.post("/api/ai", async (req, res) => {
                );
             }
             
+            // === debug
+            console.log(
+                "STATE:",
+                conversationState.awaitingInput
+            );
+            // ===
+            
             if (conversationState.awaitingInput === "feedback_detail") {
 
                await saveFeedback(userText);
