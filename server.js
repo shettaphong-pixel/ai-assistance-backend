@@ -311,13 +311,15 @@ app.get("/", (req, res) => {
 // Save Question from AI HIT
 // ===========================
 
-async function saveAiQuestion(question, answer) {
+async function saveAiQuestion(question, answer,intent) {
 
   const { error } = await supabase
     .from("ai_hits")
     .insert({
       question,
-      answer: answer
+      answer: answer,
+       intent
+       
     });
 
   if (error) {
