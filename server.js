@@ -64,6 +64,61 @@ const historyText =
    console.log("=== START PROMPT HISTORY ===");
    console.log(chatHistory);
    console.log("=== FINISH PROMPT HISTORY ===");
+
+// ===========================
+// STATE CHECK
+// ===========================
+
+const lastState =
+chatHistory
+.filter(x => x.state)
+.slice(-1)[0]
+?.state;
+
+if (lastState === "feedback_detail") { 
+await saveFeedback(userText);
+return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
+}   
+
+// ===========================
+// INTENT CHECK
+// ===========================
+ 
+const intent = detectIntent(userText);
+         
+   console.log(
+             "Intent:",
+             intent
+         );
+   
+if (intent === "GIVE_FEEDBACK") {
+ 
+if (isFeedbackStart(userText)) {
+ 
+return JSON.stringify({
+message: "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย",
+state: "feedback_detail"
+});
+}
+ 
+await saveFeedback(userText);
+ 
+return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
+}   
+
+// ===========================
+// RECOMMEND
+// ===========================
+ 
+if (intent === "REQUEST_ADVICE") {
+ 
+return "นี่คือ Applications ที่แนะนำ...";
+}
+
+// ===========================
+// AI PROMPT เดิม
+// ===========================   
+   
    return `
 
 ${SESSION_PROMPT}
@@ -435,22 +490,8 @@ app.post("/api/ai", async (req, res) => {
              }
              return "NORMAL";
          }
+     
 
-         const intent = detectIntent(userText);
-         console.log(
-             "Intent:",
-             intent
-         );
-
-
-         async function handleMessage(userText, intent) {
-            // =====================
-            // STEP 1 : กำลังรอ Feedback อยู่
-            // =====================
-
-            const conversationState = {
-                  awaitingInput: null
-            };
 
             const feedbackStartPatterns = [
                   "ขอเสนอแนะ",
@@ -478,53 +519,64 @@ app.post("/api/ai", async (req, res) => {
                 conversationState.awaitingInput
             );
             // ===
-            
-            if (conversationState.awaitingInput === "feedback_detail") {
 
-               await saveFeedback(userText);
-               conversationState.awaitingInput = null;
-               console.log("Feedback complete");
-               return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
+         //async function handleMessage(userText, intent) {
+            // =====================
+            // STEP 1 : กำลังรอ Feedback อยู่
+            // =====================
+
+            //const conversationState = {
+                  //awaitingInput: null
+            //};
+
+
+            
+            //if (conversationState.awaitingInput === "feedback_detail") {
+
+               //await saveFeedback(userText);
+               //conversationState.awaitingInput = null;
+               //console.log("Feedback complete");
+               //return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
                
 
-            }
+            //}
 
             // =====================
             // STEP 2 : ตรวจ Intent Feedback
             // =====================
             
-            if (intent ==="GIVE_FEEDBACK")
-            {
+            //if (intent ==="GIVE_FEEDBACK")
+            //{
 
                // กรณีผู้ใช้ขอเริ่มเสนอแนะ
-               if (isFeedbackStart(userText)) 
-               {
+               //if (isFeedbackStart(userText)) 
+               //{
  
-                  conversationState.awaitingInput = "feedback_detail";
-                  console.log("Start Feedback");
-                  return "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย";
+                  //conversationState.awaitingInput = "feedback_detail";
+                  //console.log("Start Feedback");
+                  //return "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย";
 
 
 
-               }
+               //}
 
                // กรณีให้ Feedback มาเลย
-               await saveFeedback(userText);
+               //await saveFeedback(userText);
 
-               console.log("Direct Feedback");
-               return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
+               //console.log("Direct Feedback");
+               //return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
 
 
-            }
+            //}
 
             // =====================
             // STEP 3 : Intent อื่น
             // =====================
 
-            console.log("No Feedback");
-            return "ตอบตามระบบปกติ";
+            //console.log("No Feedback");
+            //return "ตอบตามระบบปกติ";
 
-         }
+         //}
 
 ``       
          // ===========================
@@ -638,21 +690,7 @@ userText,
 result
 );
 
-const stateResult =
-     await handleMessage(
-    userText,
-    intent
-);
 
-   if(stateResult) {
-    res.json({
-      message: stateResult
-    });
-         console.log(
-      "Answer:",
-      stateResult
-   );
-   }
        res.json({
       message: result
     });
