@@ -387,13 +387,14 @@ app.post("/api/ai", async (req, res) => {
 
                   // check start feedback pattern
                   const feedbackStartPatterns = [
-                                                    "ขอเสนอแนะ",
-                                                    "มีข้อเสนอแนะ",
-                                                    "ขอ feedback",
-                                                    "อยากให้ข้อเสนอแนะ",
-                                                    "ขอแสดงความคิดเห็น",
-                                                    "ขอเสนออะไรหน่อย",
-                                                    "ขอเสนอหน่อย"
+                                                   "ขอเสนอแนะ",
+                                                   "มีข้อเสนอแนะ",
+                                                   "ขอ feedback",
+                                                   "อยากให้ข้อเสนอแนะ",
+                                                   "ขอแสดงความคิดเห็น",
+                                                   "เสนอแนะหน่อย"
+                                                   "ขอเสนออะไรหน่อย",
+                                                   "ขอเสนอหน่อย"
                                                 ];
      
                   function isFeedbackStart(text) {
@@ -408,19 +409,37 @@ app.post("/api/ai", async (req, res) => {
      
          function detectIntent(userText) {
              const text = userText.toLowerCase();
+            
              const recommendPatterns = [
-                 "ช่วยแนะนำ",
-                 "ขอคำแนะนำ",
-                 "มีอะไรแนะนำ",
-                 "แนะนำหน่อย",
-                 "แนะนำให้หน่อย"
+               "ช่วยแนะนำ",
+               "ขอคำแนะนำ",
+               "มีอะไรแนะนำ",
+               "แนะนำหน่อย",
+               "แนะนำให้หน่อย"
              ];
+            
              const feedbackPatterns = [
-                 "อยากแนะนำ",
-                 "ขอแนะนำ",
-                 "ข้อเสนอแนะ",
-                 "เสนอแนะ"
-             ];
+               "อยากแนะนำ",
+               "ขอแนะนำ",
+               "ข้อเสนอแนะ",
+               "เสนอแนะ",
+               "ขอเสนอแนะ",
+               "มีข้อเสนอแนะ",
+               "ขอ feedback",
+               "อยากให้ข้อเสนอแนะ",
+               "ขอแสดงความคิดเห็น",
+               "เสนอแนะหน่อย"
+               "ขอเสนออะไรหน่อย",
+               "ขอเสนอหน่อย"
+               "ขอเสนอว่า",
+               "อยากเสนอว่า",
+               "ขอแนะนำว่า",
+               "ผมคิดว่า",
+               "ฉันคิดว่า",
+               "ระบบควร",
+               "แอปควร"
+            ];
+
              if (
                  recommendPatterns.some(p =>
                      text.includes(p)
@@ -437,21 +456,81 @@ app.post("/api/ai", async (req, res) => {
              }
              return "NORMAL";
          }
-         
+
+         const conversationState = {
+                awaitingInput: null
+               };
+     
+         const feedbackStartPatterns = [
+               "ขอเสนอแนะ",
+               "มีข้อเสนอแนะ",
+               "ขอ feedback",
+               "อยากให้ข้อเสนอแนะ",
+               "ขอแสดงความคิดเห็น",
+               "เสนอแนะหน่อย"
+               "ขอเสนออะไรหน่อย",
+               "ขอเสนอหน่อย"
+         ];
+     
+         function isFeedbackStart(text) {
+                              
+            const userText = text.toLowerCase();
+                              
+               return   feedbackStartPatterns.some(pattern =>
+                        userText.includes(pattern.toLowerCase())
+               );
+         }
+     
+     
          const intent = detectIntent(userText);
          console.log(
              "Intent:",
              intent
          );
 
-if (
-    intent ===
-    "GIVE_FEEDBACK"
-){
-    await saveFeedback(
-        userText
-    );
-}
+
+         async function handleMessage(userText, intent) {
+            // =====================
+            // STEP 1 : กำลังรอ Feedback อยู่
+            // =====================
+            if (conversationState.awaitingInput === "feedback_detail") {
+
+               await saveFeedback(userText);
+               conversationState.awaitingInput = null;
+               return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
+
+            }
+
+            // =====================
+            // STEP 2 : ตรวจ Intent Feedback
+            // =====================
+            
+            if (intent ==="GIVE_FEEDBACK")
+            {
+
+               // กรณีผู้ใช้ขอเริ่มเสนอแนะ
+               if (isFeedbackStart(userText)) 
+               {
+ 
+                  conversationState.awaitingInput = "feedback_detail";
+ 
+                  return "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย";
+
+               }
+
+               // กรณีให้ Feedback มาเลย
+               await saveFeedback(userText);
+ 
+               return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
+            }
+
+            // =====================
+            // STEP 3 : Intent อื่น
+            // =====================
+ 
+            return "ตอบตามระบบปกติ";
+         }
+
 ``       
          // ===========================
      
