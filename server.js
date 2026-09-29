@@ -318,7 +318,7 @@ async function saveAiQuestion(question, answer,intent) {
     .insert({
       question,
       answer: answer,
-       intent
+      intent
        
     });
 
@@ -335,12 +335,13 @@ async function saveAiQuestion(question, answer,intent) {
 // Save feedback
 // ===========================
 
-async function saveFeedback(userText) {
+async function saveFeedback(userText,intent) {
 
   const { error } = await supabase
     .from("ai_hits")
     .insert({
-      userText
+      userText,
+      intent
     });
 
   if (error) {
@@ -620,7 +621,12 @@ await saveAiQuestion(
 userText,
 result
 );
-     
+
+await handleMessage(
+    userText,
+    intent
+);
+
     res.json({
       message: result
     });
