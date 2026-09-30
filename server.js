@@ -128,7 +128,7 @@ if (!GEMINI_API_KEY) {
 // Save feedback
 // ===========================
 
-const intent = detectIntent(userText);
+
 
 async function saveFeedback(userText,intent) {
 
@@ -183,7 +183,7 @@ return "ขอบคุณสำหรับข้อเสนอแนะค่
 // ===========================
 // INTENT CHECK
 // ===========================
-         
+ const intent = detectIntent(userText);        
    console.log(
              "Intent:",
              intent
