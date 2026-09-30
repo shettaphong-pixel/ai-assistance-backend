@@ -472,7 +472,7 @@ app.post("/api/ai", async (req, res) => {
 // ===========================   
             if (intent === "GIVE_FEEDBACK") {
  
-               if (isFeedbackStart(userText,answer,intent)) {
+               if (isFeedbackStart(userText,result,intent)) {
  
                   return res.json({
                      message: "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย",
@@ -480,7 +480,7 @@ app.post("/api/ai", async (req, res) => {
                   });
                }
  
-               await saveFeedback(userText,answer,intent);
+               await saveFeedback(userText,result,intent);
  
                return res.json({
                   message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
