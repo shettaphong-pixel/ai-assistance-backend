@@ -49,107 +49,10 @@ if (!GEMINI_API_KEY) {
   process.exit(1);
 }
 
-         // ===========================
-         // Clarify UesrText intent
-         // ===========================
-     
-         function detectIntent(userText) {
-             const text = userText.toLowerCase();
-            
-             const recommendPatterns = [
-               "ช่วยแนะนำ",
-               "ขอคำแนะนำ",
-               "มีอะไรแนะนำ",
-               "แนะนำหน่อย",
-               "แนะนำให้หน่อย"
-             ];
-            
-             const feedbackPatterns = [
-               "อยากแนะนำ",
-               "ขอแนะนำ",
-               "ข้อเสนอแนะ",
-               "เสนอแนะ",
-               "ขอเสนอแนะ",
-               "มีข้อเสนอแนะ",
-               "ขอ feedback",
-               "อยากให้ข้อเสนอแนะ",
-               "ขอแสดงความคิดเห็น",
-               "เสนอแนะหน่อย",
-               "ขอเสนออะไรหน่อย",
-               "ขอเสนอหน่อย",
-               "ขอเสนอว่า",
-               "อยากเสนอว่า",
-               "ขอแนะนำว่า",
-               "ผมคิดว่า",
-               "ฉันคิดว่า",
-               "ระบบควร",
-               "แอปควร"
-            ];
-
-             if (
-                 recommendPatterns.some(p =>
-                     text.includes(p)
-                 )
-             ) {
-                 return "REQUEST_ADVICE";
-             }
-             if (
-                 feedbackPatterns.some(p =>
-                     text.includes(p)
-                 )
-             ) {
-                 return "GIVE_FEEDBACK";
-             }
-             return "NORMAL";
-         }
-     
-
-
-            const feedbackStartPatterns = [
-                  "ขอเสนอแนะ",
-                  "มีข้อเสนอแนะ",
-                  "ขอ feedback",
-                  "อยากให้ข้อเสนอแนะ",
-                  "ขอแสดงความคิดเห็น",
-                  "เสนอแนะหน่อย",
-                  "ขอเสนออะไรหน่อย",
-                  "ขอเสนอหน่อย"
-            ];
-
-            function isFeedbackStart(text) {
-                              
-               const userText = text.toLowerCase();
-                              
-                  return   feedbackStartPatterns.some(pattern =>
-                        userText.includes(pattern.toLowerCase())
-               );
-            } 
-
-// ===========================
-// Save feedback
-// ===========================
 
 
 
-async function saveFeedback(userText,intent) {
 
-
-  
-   const { error } = await supabase
-    .from("ai_hits")
-    .insert({
-      userText,
-      intent
-    });
-
-  if (error) {
-    console.error(
-      "Save AI Question Error:",
-      error.message
-    );
-  }
-}
-// ===========================
 
 // ===========================
 // Prompt Builder
@@ -518,6 +421,81 @@ app.post("/api/ai", async (req, res) => {
      console.log("=== FINISH CHAT HISTORY ===");
      //finish add
 
+         // ===========================
+         // Clarify UesrText intent
+         // ===========================
+     
+         function detectIntent(userText) {
+             const text = userText.toLowerCase();
+            
+             const recommendPatterns = [
+               "ช่วยแนะนำ",
+               "ขอคำแนะนำ",
+               "มีอะไรแนะนำ",
+               "แนะนำหน่อย",
+               "แนะนำให้หน่อย"
+             ];
+            
+             const feedbackPatterns = [
+               "อยากแนะนำ",
+               "ขอแนะนำ",
+               "ข้อเสนอแนะ",
+               "เสนอแนะ",
+               "ขอเสนอแนะ",
+               "มีข้อเสนอแนะ",
+               "ขอ feedback",
+               "อยากให้ข้อเสนอแนะ",
+               "ขอแสดงความคิดเห็น",
+               "เสนอแนะหน่อย",
+               "ขอเสนออะไรหน่อย",
+               "ขอเสนอหน่อย",
+               "ขอเสนอว่า",
+               "อยากเสนอว่า",
+               "ขอแนะนำว่า",
+               "ผมคิดว่า",
+               "ฉันคิดว่า",
+               "ระบบควร",
+               "แอปควร"
+            ];
+
+             if (
+                 recommendPatterns.some(p =>
+                     text.includes(p)
+                 )
+             ) {
+                 return "REQUEST_ADVICE";
+             }
+             if (
+                 feedbackPatterns.some(p =>
+                     text.includes(p)
+                 )
+             ) {
+                 return "GIVE_FEEDBACK";
+             }
+             return "NORMAL";
+         }
+     
+
+
+            const feedbackStartPatterns = [
+                  "ขอเสนอแนะ",
+                  "มีข้อเสนอแนะ",
+                  "ขอ feedback",
+                  "อยากให้ข้อเสนอแนะ",
+                  "ขอแสดงความคิดเห็น",
+                  "เสนอแนะหน่อย",
+                  "ขอเสนออะไรหน่อย",
+                  "ขอเสนอหน่อย"
+            ];
+
+            function isFeedbackStart(text) {
+                              
+               const userText = text.toLowerCase();
+                              
+                  return   feedbackStartPatterns.some(pattern =>
+                        userText.includes(pattern.toLowerCase())
+               );
+            } 
       
 
          //async function handleMessage(userText, intent) {
@@ -580,6 +558,28 @@ app.post("/api/ai", async (req, res) => {
 
 ``       
          // ===========================
+
+   // ===========================
+   // Save feedback
+   // ===========================
+
+   async function saveFeedback(userText,intent) {
+  
+      const { error } = await supabase
+       .from("ai_hits")
+       .insert({
+         userText,
+         intent
+       });
+
+     if (error) {
+       console.error(
+         "Save AI Question Error:",
+         error.message
+       );
+     }
+   }
+   // ===========================
      
     if (!userText || userText.trim() === "") {
       return res.status(400).json({
