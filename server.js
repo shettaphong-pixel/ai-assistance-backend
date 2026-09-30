@@ -56,6 +56,40 @@ if (!GEMINI_API_KEY) {
   process.exit(1);
 }
 
+         // ===========================
+         // load intent pattern
+         // ===========================
+     
+           async function loadIntentPatterns() {
+               const { data, error } = await supabase
+                  .from("intent_wording")
+                  .select("*")
+                  .eq("id", 1)
+                  .single();
+
+                  if (error) {
+                     console.error("Load intent wording failed:", error);
+                     return;
+                  }
+
+                  intentPatterns = {
+                  recommend: data.recommend
+                  ? data.recommend.split(",").map(x => x.trim())
+                  : [],
+
+                  startfeedback: data.startfeedback
+                  ? data.startfeedback.split(",").map(x => x.trim())
+                  : [],
+
+                  givefeedback: data.givefeedback
+                  ? data.givefeedback.split(",").map(x => x.trim())
+                  : []
+                  };
+
+                  console.log("Intent patterns loaded:", intentPatterns);
+            }
+            ``
+         // ===========================
 
 // ===========================
 // Prompt Builder
@@ -394,40 +428,6 @@ app.post("/api/ai", async (req, res) => {
             });
          }  
 
-         // ===========================
-         // load intent pattern
-         // ===========================
-     
-           async function loadIntentPatterns() {
-               const { data, error } = await supabase
-                  .from("intent_wording")
-                  .select("*")
-                  .eq("id", 1)
-                  .single();
-
-                  if (error) {
-                     console.error("Load intent wording failed:", error);
-                     return;
-                  }
-
-                  intentPatterns = {
-                  recommend: data.recommend
-                  ? data.recommend.split(",").map(x => x.trim())
-                  : [],
-
-                  startfeedback: data.startfeedback
-                  ? data.startfeedback.split(",").map(x => x.trim())
-                  : [],
-
-                  givefeedback: data.givefeedback
-                  ? data.givefeedback.split(",").map(x => x.trim())
-                  : []
-                  };
-
-                  console.log("Intent patterns loaded:", intentPatterns);
-            }
-            ``
-         // ===========================
      
 
      
