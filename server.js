@@ -53,7 +53,7 @@ if (!GEMINI_API_KEY) {
 // Prompt Builder
 // ===========================
 
-async function buildAIPrompt(userText,manualContent,chatHistory) 
+async function buildAIPrompt(userText,manualContent,chatHistory,intent) 
 {
 const historyText =
    chatHistory
@@ -665,7 +665,7 @@ ${item.content}
   .join("\n\n");
      }
 
-const prompt = buildAIPrompt(userText,manualContent,chatHistory);
+const prompt = await buildAIPrompt(userText,manualContent,chatHistory,intent);
 console.log("Prompt Length:", prompt.length);
 const estimatedTokens =
   Math.ceil(prompt.length / 4);
