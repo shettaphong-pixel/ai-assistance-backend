@@ -480,7 +480,7 @@ app.post("/api/ai", async (req, res) => {
                   });
                }
  
-               await saveFeedback(userText,result,intent);
+               await saveFeedback(userText,intent);
  
                return res.json({
                   message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
