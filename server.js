@@ -49,11 +49,6 @@ if (!GEMINI_API_KEY) {
   process.exit(1);
 }
 
-
-
-
-
-
 // ===========================
 // Prompt Builder
 // ===========================
@@ -391,8 +386,6 @@ async function saveAiQuestion(question, answer,intent) {
 // ===========================
 
 
-
-
 // ===========================
 // Chat Endpoint
 // ===========================
@@ -488,14 +481,14 @@ app.post("/api/ai", async (req, res) => {
                   "ขอเสนอหน่อย"
             ];
 
-            function isFeedbackStart(text) {
+         function isFeedbackStart(text) {
                               
-               const userText = text.toLowerCase();
+            const userText = text.toLowerCase();
                               
-                  return   feedbackStartPatterns.some(pattern =>
+            return   feedbackStartPatterns.some(pattern =>
                         userText.includes(pattern.toLowerCase())
-               );
-            } 
+            );
+         } 
       
 
          //async function handleMessage(userText, intent) {
