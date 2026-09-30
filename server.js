@@ -421,8 +421,6 @@ app.post("/api/ai", async (req, res) => {
          // Clarify UesrText intent
          // ===========================
          
-        const intent = detectIntent(userText);
-     
          function detectIntent(userText) {
              const text = userText.toLowerCase();
             
