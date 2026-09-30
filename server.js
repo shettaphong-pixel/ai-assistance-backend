@@ -321,13 +321,13 @@ app.get("/", (req, res) => {
 // Save Question from AI HIT
 // ===========================
 
-async function saveAiQuestion(userText, answer,intent) {
+async function saveAiQuestion(userText, result,intent) {
    
   const { error } = await supabase
     .from("ai_hits")
     .insert({
       question: userText,
-      answer: answer,
+      answer: result,
       intent: intent
        
     });
@@ -680,7 +680,8 @@ const result = await callAI(prompt);
 
 await saveAiQuestion(
 userText,
-result
+result,
+intent
 );
      
 // ===========================
