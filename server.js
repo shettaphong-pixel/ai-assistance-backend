@@ -555,12 +555,13 @@ app.post("/api/ai", async (req, res) => {
    // Save feedback
    // ===========================
 
-   async function saveFeedback(userText,intent) {
+   async function saveFeedback(userText,answer,intent) {
   
       const { error } = await supabase
        .from("ai_hits")
        .insert({
-         userText,
+         question,
+         answer : answer,
          intent
        });
 
