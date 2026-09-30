@@ -321,13 +321,13 @@ app.get("/", (req, res) => {
 // Save Question from AI HIT
 // ===========================
 
-async function saveAiQuestion(userText, result,intent) {
+async function saveAiQuestion(userText, answer,intent) {
    
   const { error } = await supabase
     .from("ai_hits")
     .insert({
       question: userText,
-      answer: result,
+      answer: anwer,
       intent: intent
        
     });
@@ -472,7 +472,7 @@ app.post("/api/ai", async (req, res) => {
 // ===========================   
             if (intent === "GIVE_FEEDBACK") {
  
-               if (isFeedbackStart(userText,result,intent)) {
+               if (isFeedbackStart(userText,answer,intent)) {
  
                   return res.json({
                      message: "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย",
@@ -480,7 +480,7 @@ app.post("/api/ai", async (req, res) => {
                   });
                }
  
-               await saveFeedback(userText,result,intent);
+               await saveFeedback(userText,answer,intent);
  
                return res.json({
                   message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
@@ -555,13 +555,13 @@ app.post("/api/ai", async (req, res) => {
    // Save feedback
    // ===========================
 
-   async function saveFeedback(userText,result,intent) {
+   async function saveFeedback(userText,answer,intent) {
   
       const { error } = await supabase
        .from("ai_hits")
        .insert({
          question : userText,
-         answer : result,
+         answer : answer,
          intent : intent
        });
 
