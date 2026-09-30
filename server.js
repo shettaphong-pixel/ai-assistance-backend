@@ -53,7 +53,7 @@ if (!GEMINI_API_KEY) {
 // Prompt Builder
 // ===========================
 
-async function buildAIPrompt(userText,manualContent,chatHistory,intent) 
+async function buildAIPrompt(userText,manualContent,chatHistory) 
 {
 
    const intent = detectIntent(userText);
