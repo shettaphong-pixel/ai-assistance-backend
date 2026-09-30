@@ -486,67 +486,6 @@ app.post("/api/ai", async (req, res) => {
                   message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
                });
             }  
-     
- 
-
-
-         //async function handleMessage(userText, intent) {
-            // =====================
-            // STEP 1 : กำลังรอ Feedback อยู่
-            // =====================
-
-            //const conversationState = {
-                  //awaitingInput: null
-            //};
-
-
-            
-            //if (conversationState.awaitingInput === "feedback_detail") {
-
-               //await saveFeedback(userText);
-               //conversationState.awaitingInput = null;
-               //console.log("Feedback complete");
-               //return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
-               
-
-            //}
-
-            // =====================
-            // STEP 2 : ตรวจ Intent Feedback
-            // =====================
-            
-            //if (intent ==="GIVE_FEEDBACK")
-            //{
-
-               // กรณีผู้ใช้ขอเริ่มเสนอแนะ
-               //if (isFeedbackStart(userText)) 
-               //{
- 
-                  //conversationState.awaitingInput = "feedback_detail";
-                  //console.log("Start Feedback");
-                  //return "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย";
-
-
-
-               //}
-
-               // กรณีให้ Feedback มาเลย
-               //await saveFeedback(userText);
-
-               //console.log("Direct Feedback");
-               //return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
-
-
-            //}
-
-            // =====================
-            // STEP 3 : Intent อื่น
-            // =====================
-
-            //console.log("No Feedback");
-            //return "ตอบตามระบบปกติ";
-
-         //}
 
 ``       
          // ===========================
