@@ -381,7 +381,7 @@ app.post("/api/ai", async (req, res) => {
          ?.state;
 
          if (lastState === "feedback_detail") { 
-            await saveFeedback(userText,"",intent);
+            await saveFeedback(userText,"","GIVE_FEEDBACK");
             return res.json({
                message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
             });
