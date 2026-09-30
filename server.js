@@ -55,7 +55,10 @@ if (!GEMINI_API_KEY) {
 
 async function buildAIPrompt(userText,manualContent,chatHistory,intent) 
 {
-const historyText =
+
+   const intent = detectIntent(userText);
+   
+   const historyText =
    chatHistory
       .map(msg =>
          `${msg.role}: ${msg.content}`
