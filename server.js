@@ -53,10 +53,9 @@ if (!GEMINI_API_KEY) {
 // Prompt Builder
 // ===========================
 
-async function buildAIPrompt(userText,manualContent,chatHistory) 
+async function buildAIPrompt(userText,manualContent,chatHistory,intent) 
 {
 
-   const intent = detectIntent(userText);
    
    const historyText =
    chatHistory
@@ -412,6 +411,9 @@ app.post("/api/ai", async (req, res) => {
            recentText
           } = req.body;
 
+   
+   const intent = detectIntent(userText);
+     
      console.log("=== START CHAT HISTORY ===");
      console.log(chatHistory);
      console.log("=== FINISH CHAT HISTORY ===");
