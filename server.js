@@ -92,7 +92,7 @@ return "ขอบคุณสำหรับข้อเสนอแนะค่
    
 if (intent === "GIVE_FEEDBACK") {
  
-if (isFeedbackStart(userText,intent)) {
+if (isFeedbackStart(userText)) {
  
 return JSON.stringify({
 message: "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย",
@@ -100,7 +100,7 @@ state: "feedback_detail"
 });
 }
  
-await saveFeedback(userText,intent);
+await saveFeedback(userText);
  
 return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
 }   
