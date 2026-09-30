@@ -5,6 +5,7 @@ import express from "express";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 
+const intent = detectIntent(userText); 
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -132,7 +133,7 @@ if (!GEMINI_API_KEY) {
 
 async function saveFeedback(userText,intent) {
 
-   const intent = detectIntent(userText); 
+
   
    const { error } = await supabase
     .from("ai_hits")
@@ -162,8 +163,6 @@ const historyText =
          `${msg.role}: ${msg.content}`
       )
       .join("\n");
-
- const intent = detectIntent(userText); 
 
    console.log("=== START PROMPT HISTORY ===");
    console.log(chatHistory);
@@ -469,8 +468,6 @@ app.get("/", (req, res) => {
 // ===========================
 
 async function saveAiQuestion(question, answer,intent) {
-
-   const intent = detectIntent(userText); 
    
   const { error } = await supabase
     .from("ai_hits")
