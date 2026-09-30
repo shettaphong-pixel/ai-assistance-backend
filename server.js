@@ -10,6 +10,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+      
+let intentPatterns = {
+   recommend: [],
+   startfeedback: [],
+   givefeedback: []
+};
+
 //add
 let manualsCache = [];
 
@@ -386,53 +393,61 @@ app.post("/api/ai", async (req, res) => {
                message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
             });
          }  
+
+         // ===========================
+         // load intent pattern
+         // ===========================
+     
+           async function loadIntentPatterns() {
+               const { data, error } = await supabase
+                  .from("intent_wording")
+                  .select("*")
+                  .eq("id", 1)
+                  .single();
+
+                  if (error) {
+                     console.error("Load intent wording failed:", error);
+                     return;
+                  }
+
+                  intentPatterns = {
+                  recommend: data.recommend
+                  ? data.recommend.split(",").map(x => x.trim())
+                  : [],
+
+                  startfeedback: data.startfeedback
+                  ? data.startfeedback.split(",").map(x => x.trim())
+                  : [],
+
+                  givefeedback: data.givefeedback
+                  ? data.givefeedback.split(",").map(x => x.trim())
+                  : []
+                  };
+
+                  console.log("Intent patterns loaded:", intentPatterns);
+            }
+            ``
+         // ===========================
+     
+
      
          // ===========================
          // Clarify UesrText intent
          // ===========================
          
          function detectIntent(userText) {
-             const text = userText.toLowerCase();
             
-             const recommendPatterns = [
-               "ช่วยแนะนำ",
-               "ขอคำแนะนำ",
-               "มีอะไรแนะนำ",
-               "แนะนำหน่อย",
-               "แนะนำให้หน่อย"
-             ];
-            
-             const feedbackPatterns = [
-               "อยากแนะนำ",
-               "ขอแนะนำ",
-               "ข้อเสนอแนะ",
-               "เสนอแนะ",
-               "ขอเสนอแนะ",
-               "มีข้อเสนอแนะ",
-               "ขอ feedback",
-               "อยากให้ข้อเสนอแนะ",
-               "ขอแสดงความคิดเห็น",
-               "เสนอแนะหน่อย",
-               "ขอเสนออะไรหน่อย",
-               "ขอเสนอหน่อย",
-               "ขอเสนอว่า",
-               "อยากเสนอว่า",
-               "ขอแนะนำว่า",
-               "ผมคิดว่า",
-               "ฉันคิดว่า",
-               "ระบบควร",
-               "แอปควร"
-            ];
+            const text = userText.toLowerCase();
 
              if (
-                 recommendPatterns.some(p =>
+                 intentPatterns.recommend.some(p =>
                      text.includes(p)
                  )
              ) {
                  return "REQUEST_ADVICE";
              }
              if (
-                 feedbackPatterns.some(p =>
+                 intentPatterns.givefeedback.some(p =>
                      text.includes(p)
                  )
              ) {
@@ -445,21 +460,11 @@ app.post("/api/ai", async (req, res) => {
                               
             const userText = text.toLowerCase();
                               
-            return   feedbackStartPatterns.some(pattern =>
+            return   intentPatterns.startfeedback.some(pattern =>
                      userText.includes(pattern.toLowerCase())
             );
          }
 
-        const feedbackStartPatterns = [
-                  "ขอเสนอแนะ",
-                  "มีข้อเสนอแนะ",
-                  "ขอ feedback",
-                  "อยากให้ข้อเสนอแนะ",
-                  "ขอแสดงความคิดเห็น",
-                  "เสนอแนะหน่อย",
-                  "ขอเสนออะไรหน่อย",
-                  "ขอเสนอหน่อย"
-            ];
          const intent = detectIntent(userText);
      
             console.log(
@@ -657,6 +662,12 @@ res.json({
 // ===========================
 
 const PORT = process.env.PORT || 5000;
+
+await loadIntentPatterns();
+
+setInterval(async () => {
+  await loadIntentPatterns();
+}, 5 * 60 * 1000);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ AI Backend running on port ${PORT}`);
