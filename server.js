@@ -49,31 +49,12 @@ if (!GEMINI_API_KEY) {
   process.exit(1);
 }
 
+
 // ===========================
 // Prompt Builder
 // ===========================
 
-            const feedbackStartPatterns = [
-                  "ขอเสนอแนะ",
-                  "มีข้อเสนอแนะ",
-                  "ขอ feedback",
-                  "อยากให้ข้อเสนอแนะ",
-                  "ขอแสดงความคิดเห็น",
-                  "เสนอแนะหน่อย",
-                  "ขอเสนออะไรหน่อย",
-                  "ขอเสนอหน่อย"
-            ];
-
-         function isFeedbackStart(text) {
-                              
-            const userText = text.toLowerCase();
-                              
-            return   feedbackStartPatterns.some(pattern =>
-                        userText.includes(pattern.toLowerCase())
-            );
-         } 
-
-async function buildAIPrompt(userText,manualContent,chatHistory,intent) 
+async function buildAIPrompt(userText,manualContent,chatHistory) 
 {
 
    
@@ -88,53 +69,6 @@ async function buildAIPrompt(userText,manualContent,chatHistory,intent)
    console.log(chatHistory);
    console.log("=== FINISH PROMPT HISTORY ===");
 
-// ===========================
-// STATE CHECK
-// ===========================
-
-const lastState =
-chatHistory
-.filter(x => x.state)
-.slice(-1)[0]
-?.state;
-
-if (lastState === "feedback_detail") { 
-await saveFeedback(userText,intent);
-return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
-}   
-
-// ===========================
-// INTENT CHECK
-// ===========================
-       
-   console.log(
-             "Intent:",
-             intent
-         );
-   
-if (intent === "GIVE_FEEDBACK") {
- 
-if (isFeedbackStart(userText)) {
- 
-return JSON.stringify({
-message: "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย",
-state: "feedback_detail"
-});
-}
- 
-await saveFeedback(userText);
- 
-return "ขอบคุณสำหรับข้อเสนอแนะค่ะ";
-}   
-
-// ===========================
-// RECOMMEND
-// ===========================
- 
-if (intent === "REQUEST_ADVICE") {
- 
-return "นี่คือ Applications ที่แนะนำ...";
-}
 
 // ===========================
 // AI PROMPT เดิม
@@ -430,15 +364,29 @@ app.post("/api/ai", async (req, res) => {
            chatHistory,
            recentText
           } = req.body;
-
-   
-   const intent = detectIntent(userText);
      
      console.log("=== START CHAT HISTORY ===");
      console.log(chatHistory);
      console.log("=== FINISH CHAT HISTORY ===");
      //finish add
 
+         // ===========================
+         // STATE CHECK
+         // ===========================
+
+         const lastState =
+         chatHistory
+         .filter(x => x.state)
+         .slice(-1)[0]
+         ?.state;
+
+         if (lastState === "feedback_detail") { 
+            await saveFeedback(userText,intent);
+            return res.json({
+               message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
+            });
+         }  
+     
          // ===========================
          // Clarify UesrText intent
          // ===========================
@@ -492,11 +440,55 @@ app.post("/api/ai", async (req, res) => {
              }
              return "NORMAL";
          }
+
+         function isFeedbackStart(text) {
+                              
+            const userText = text.toLowerCase();
+                              
+            return   feedbackStartPatterns.some(pattern =>
+                     userText.includes(pattern.toLowerCase())
+            );
+         }
+
+        const feedbackStartPatterns = [
+                  "ขอเสนอแนะ",
+                  "มีข้อเสนอแนะ",
+                  "ขอ feedback",
+                  "อยากให้ข้อเสนอแนะ",
+                  "ขอแสดงความคิดเห็น",
+                  "เสนอแนะหน่อย",
+                  "ขอเสนออะไรหน่อย",
+                  "ขอเสนอหน่อย"
+            ];
+         const intent = detectIntent(userText);
      
+            console.log(
+                "Intent:",
+            intent               
+            );
+     
+// ===========================
+// Give Feedback
+// ===========================   
+            if (intent === "GIVE_FEEDBACK") {
+ 
+               if (isFeedbackStart(userText)) {
+ 
+                  return res.json({
+                     message: "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย",
+                     state: "feedback_detail"
+                  });
+               }
+ 
+               await saveFeedback(userText);
+ 
+               return res.json({
+                  message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
+               });
+            }  
+     
+ 
 
-
-
-      
 
          //async function handleMessage(userText, intent) {
             // =====================
@@ -689,11 +681,14 @@ await saveAiQuestion(
 userText,
 result
 );
-
-
-       res.json({
-      message: result
-    });
+     
+// ===========================
+// ======== AI Answer to Frontend ======
+// ===========================
+     
+res.json({
+   message: result
+});
 
    console.log(
       "Answer:",
@@ -710,7 +705,8 @@ result
 
   }
 });//finish AI response
-   
+// ===========================
+
 // ===========================
 // Start Server
 // ===========================
