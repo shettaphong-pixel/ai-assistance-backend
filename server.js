@@ -53,6 +53,26 @@ if (!GEMINI_API_KEY) {
 // Prompt Builder
 // ===========================
 
+            const feedbackStartPatterns = [
+                  "ขอเสนอแนะ",
+                  "มีข้อเสนอแนะ",
+                  "ขอ feedback",
+                  "อยากให้ข้อเสนอแนะ",
+                  "ขอแสดงความคิดเห็น",
+                  "เสนอแนะหน่อย",
+                  "ขอเสนออะไรหน่อย",
+                  "ขอเสนอหน่อย"
+            ];
+
+         function isFeedbackStart(text) {
+                              
+            const userText = text.toLowerCase();
+                              
+            return   feedbackStartPatterns.some(pattern =>
+                        userText.includes(pattern.toLowerCase())
+            );
+         } 
+
 async function buildAIPrompt(userText,manualContent,chatHistory,intent) 
 {
 
@@ -475,25 +495,7 @@ app.post("/api/ai", async (req, res) => {
      
 
 
-            const feedbackStartPatterns = [
-                  "ขอเสนอแนะ",
-                  "มีข้อเสนอแนะ",
-                  "ขอ feedback",
-                  "อยากให้ข้อเสนอแนะ",
-                  "ขอแสดงความคิดเห็น",
-                  "เสนอแนะหน่อย",
-                  "ขอเสนออะไรหน่อย",
-                  "ขอเสนอหน่อย"
-            ];
 
-         function isFeedbackStart(text) {
-                              
-            const userText = text.toLowerCase();
-                              
-            return   feedbackStartPatterns.some(pattern =>
-                        userText.includes(pattern.toLowerCase())
-            );
-         } 
       
 
          //async function handleMessage(userText, intent) {
