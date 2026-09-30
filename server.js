@@ -321,14 +321,14 @@ app.get("/", (req, res) => {
 // Save Question from AI HIT
 // ===========================
 
-async function saveAiQuestion(question, answer,intent) {
+async function saveAiQuestion(userText, answer,intent) {
    
   const { error } = await supabase
     .from("ai_hits")
     .insert({
-      question,
+      question: userText,
       answer: answer,
-      intent
+      intent: intent
        
     });
 
@@ -560,9 +560,9 @@ app.post("/api/ai", async (req, res) => {
       const { error } = await supabase
        .from("ai_hits")
        .insert({
-         question,
+         question : userText,
          answer : answer,
-         intent
+         intent : intent
        });
 
      if (error) {
