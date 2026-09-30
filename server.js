@@ -132,7 +132,9 @@ if (!GEMINI_API_KEY) {
 
 async function saveFeedback(userText,intent) {
 
-  const { error } = await supabase
+   const intent = detectIntent(userText); 
+  
+   const { error } = await supabase
     .from("ai_hits")
     .insert({
       userText,
@@ -161,6 +163,8 @@ const historyText =
       )
       .join("\n");
 
+ const intent = detectIntent(userText); 
+
    console.log("=== START PROMPT HISTORY ===");
    console.log(chatHistory);
    console.log("=== FINISH PROMPT HISTORY ===");
@@ -183,7 +187,7 @@ return "ขอบคุณสำหรับข้อเสนอแนะค่
 // ===========================
 // INTENT CHECK
 // ===========================
- const intent = detectIntent(userText);        
+       
    console.log(
              "Intent:",
              intent
@@ -466,6 +470,8 @@ app.get("/", (req, res) => {
 
 async function saveAiQuestion(question, answer,intent) {
 
+   const intent = detectIntent(userText); 
+   
   const { error } = await supabase
     .from("ai_hits")
     .insert({
