@@ -381,7 +381,7 @@ app.post("/api/ai", async (req, res) => {
          ?.state;
 
          if (lastState === "feedback_detail") { 
-            await saveFeedback(userText);
+            await saveFeedback(userText,"",intent);
             return res.json({
                message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
             });
@@ -480,7 +480,7 @@ app.post("/api/ai", async (req, res) => {
                   });
                }
  
-               await saveFeedback(userText,intent);
+               await saveFeedback(userText,"",intent);
  
                return res.json({
                   message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ"
