@@ -5,7 +5,7 @@ import express from "express";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 
-const intent = detectIntent(userText); 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -417,6 +417,8 @@ app.post("/api/ai", async (req, res) => {
          // ===========================
          // Clarify UesrText intent
          // ===========================
+         
+        const intent = detectIntent(userText);
      
          function detectIntent(userText) {
              const text = userText.toLowerCase();
