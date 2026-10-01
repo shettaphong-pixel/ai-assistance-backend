@@ -97,6 +97,7 @@ if (!GEMINI_API_KEY) {
                   };
 
                   console.log("Intent patterns loaded:", intentPatterns);
+            }
             ``
 // ===========================
 
