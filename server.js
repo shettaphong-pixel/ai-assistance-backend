@@ -474,6 +474,15 @@ app.post("/api/ai", async (req, res) => {
             );
          }
 
+         function isConjuctionsWords(text) {
+                              
+            const userText = text.toLowerCase();
+                              
+            return   intentPatterns.conjuctions.some(pattern =>
+                     userText.includes(pattern.toLowerCase())
+            );
+         }
+
          const intent = detectIntent(userText);
      
             console.log(
@@ -501,13 +510,24 @@ app.post("/api/ai", async (req, res) => {
                   // === Start Feedback ===
                if (isFeedbackStart(userText)) {
 
-                  console.log("//===== Waiting Feedback =====//");
+                     if (isConjuctions(userText)) {
+
+                        await saveFeedback(userText,"",intent);
+                     
+                        return res.json({
+                              message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ",
+                        });
+                     }
+                     else
+                     {
+                        console.log("//===== Waiting Feedback =====//");
                   
-                  return res.json({
-                     message: "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย",
-                     state: "feedback_detail"
-                  });
-               }
+                        return res.json({
+                        message: "ได้ค่ะ กรุณาระบุข้อเสนอแนะได้เลย",
+                        state: "feedback_detail"
+                        });
+                     }
+                  }
  
                await saveFeedback(userText,"",intent);
 
