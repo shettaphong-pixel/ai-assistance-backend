@@ -12,9 +12,11 @@ app.use(express.json());
 
       
 let intentPatterns = {
-   recommend: [],
-   startfeedback: [],
-   givefeedback: []
+      recommend: [],
+      startfeedback: [],
+      givefeedback: [],
+      directfeedback: [],
+      conjuctions:[]
 };
 
 //add
