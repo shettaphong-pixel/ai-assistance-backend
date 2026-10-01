@@ -456,6 +456,15 @@ app.post("/api/ai", async (req, res) => {
              return "NORMAL";
          }
 
+        function isFeedbackDirect(text) {
+                              
+            const userText = text.toLowerCase();
+                              
+            return   intentPatterns.directfeedback.some(pattern =>
+                     userText.includes(pattern.toLowerCase())
+            );
+         }
+        
          function isFeedbackStart(text) {
                               
             const userText = text.toLowerCase();
@@ -476,7 +485,20 @@ app.post("/api/ai", async (req, res) => {
 // Give Feedback
 // ===========================   
             if (intent === "GIVE_FEEDBACK") {
- 
+
+                  // === Direct Feedback ===
+               if (isFeedbackDirect(userText)) {
+
+                  console.log("//===== Direct Feedback =====//");
+
+                  await saveFeedback(userText,"",intent);
+                     
+                  return res.json({
+                     message: "ขอบคุณสำหรับข้อเสนอแนะค่ะ",
+                  });
+               }
+
+                  // === Start Feedback ===
                if (isFeedbackStart(userText)) {
 
                   console.log("//===== Waiting Feedback =====//");
