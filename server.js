@@ -85,11 +85,11 @@ if (!GEMINI_API_KEY) {
 
                   givefeedback: data.givefeedback
                   ? data.givefeedback.split(",").map(x => x.trim())
-                  : []
+                  : [],
 
                   directfeedback: data.directfeedback
                   ? data.directfeedback.split(",").map(x => x.trim())
-                  : []
+                  : [],
 
                   conjuctions: data.conjuctions
                   ? data.conjuctions.split(",").map(x => x.trim())
