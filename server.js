@@ -88,6 +88,17 @@ if (!GEMINI_API_KEY) {
                   : []
                   };
 
+                  directfeedback: data.directfeedback
+                  ? data.directfeedback.split(",").map(x => x.trim())
+                  : []
+                  };
+
+                  conjuctions: data.conjuctions
+                  ? data.conjuctions.split(",").map(x => x.trim())
+                  : []
+                  };
+
+                 
                   console.log("Intent patterns loaded:", intentPatterns);
             }
             ``
