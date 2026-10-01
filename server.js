@@ -438,9 +438,6 @@ app.post("/api/ai", async (req, res) => {
             });
          }  
 
-     
-
-     
          // ===========================
          // Clarify UesrText intent
          // ===========================
