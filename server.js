@@ -517,7 +517,7 @@ app.post("/api/ai", async (req, res) => {
                   // === Start Feedback ===
                if (isFeedbackStart(userText)) {
 
-                     if (isConjuctions(userText)) {
+                     if (isConjuctionsWords(userText)) {
 
                         await saveFeedback(userText,"",intent);
                      
