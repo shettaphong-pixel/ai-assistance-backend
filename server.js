@@ -35,18 +35,17 @@ async function refreshManuals() {
 //finish
 
 async function getManuals() {
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM manuals"
+    );
 
-  const { data, error } = await supabase
-    .from("manuals")
-    .select("*")
-
-  if (error) {
+    return rows;
+  } catch (error) {
     console.error(error);
     return [];
   }
-
-  return data;
-};
+}
 
 // ===========================
 // Config
