@@ -601,8 +601,8 @@ let relatedManuals = [];
     intent ===
     "REQUEST_ADVICE"
 ) {
-
-    relatedManuals = manuals
+      console.log("keywords before filter", keywords);
+      relatedManuals = manuals
    .filter(item => {
 
 const searchText =
@@ -615,6 +615,12 @@ const searchText =
     return keywords.some(word =>
       searchText.includes(word)
     );
+
+      if (matched) {
+            console.log("MATCH", item.app_name, item.topic);
+      }
+
+      return matched;
 })       
 }
 else {
