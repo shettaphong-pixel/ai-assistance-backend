@@ -13,21 +13,6 @@ const supabase = createClient(
 );
 // --- //
 
-// db.js //
-
-import pg from "pg";
-
-const { Pool } = pg;
-
-export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
-// --- ///
-
-
 const app = express();
 app.use(cors());
 app.use(express.json());
