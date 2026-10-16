@@ -4,14 +4,28 @@
 import express from "express";
 import cors from "cors";
 
-// connect Supabase
+// connect Supabase //
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
 );
-//
+// --- //
+
+// db.js //
+
+import pg from "pg";
+
+const { Pool } = pg;
+
+export const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+// --- ///
 
 
 const app = express();
