@@ -625,6 +625,8 @@ const searchText =
 }
 else {
 
+      console.log("keywords before filter", keywords);
+      
     relatedManuals = manuals
       .filter(item => {
           const searchText =
@@ -637,6 +639,11 @@ else {
           return keywords.some(word =>
               searchText.includes(word)
           );
+            
+            if (matched) {
+            console.log("MATCH", item.app_name, item.topic);
+      }
+            
       })
       .slice(0, 5)
 }
