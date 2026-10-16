@@ -65,42 +65,47 @@ if (!GEMINI_API_KEY) {
          // load intent pattern
          // ===========================
      
-           async function loadIntentPatterns() {
-               const { data, error } = await supabase
-                  .from("intent_wording")
-                  .select("*")
-                  .eq("id", 1)
-                  .single();
+          async function loadIntentPatterns() {
+            try {
+              const { rows } = await pool.query(
+                "SELECT * FROM intent_wording WHERE id = $1 LIMIT 1",[1]
+              );
+              
+              const data = rows[0];
 
-                  if (error) {
-                     console.error("Load intent wording failed:", error);
-                     return;
-                  }
-
-                  intentPatterns = {
-                  recommend: data.recommend
-                  ? data.recommend.split(",").map(x => x.trim())
-                  : [],
-
-                  startfeedback: data.startfeedback
-                  ? data.startfeedback.split(",").map(x => x.trim())
-                  : [],
-
-                  givefeedback: data.givefeedback
-                  ? data.givefeedback.split(",").map(x => x.trim())
-                  : [],
-
-                  directfeedback: data.directfeedback
-                  ? data.directfeedback.split(",").map(x => x.trim())
-                  : [],
-
-                  conjuctions: data.conjuctions
-                  ? data.conjuctions.split(",").map(x => x.trim())
-                  : []
-                  };
-
-                  console.log("Intent patterns loaded:", intentPatterns);
+            if (!data) {
+              console.error("No intent wording found");
+              return;
             }
+
+          intentPatterns = {
+            recommend: data.recommend
+            ? data.recommend.split(",").map(x => x.trim())
+            : [],
+
+            startfeedback: data.startfeedback
+            ? data.startfeedback.split(",").map(x => x.trim())
+            : [],
+
+            givefeedback: data.givefeedback
+            ? data.givefeedback.split(",").map(x => x.trim())
+            : [],
+
+            directfeedback: data.directfeedback
+            ? data.directfeedback.split(",").map(x => x.trim())
+            : [],
+
+            conjuctions: data.conjuctions
+            ? data.conjuctions.split(",").map(x => x.trim())
+            : []
+            };
+
+            console.log("Intent patterns loaded:", intentPatterns);
+
+            } catch (error) {
+          console.error("Load intent wording failed:", error);
+            }
+          }
             ``
 // ===========================
 
