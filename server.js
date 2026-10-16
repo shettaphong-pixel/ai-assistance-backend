@@ -36,11 +36,13 @@ async function refreshManuals() {
 
 async function getManuals() {
   try {
-    const { rows } = await pool.query(
+    const result = await pool.query(
       "SELECT * FROM manuals"
     );
 
-    return rows;
+    const data = result.rows;
+
+    return data;
   } catch (error) {
     console.error(error);
     return [];
