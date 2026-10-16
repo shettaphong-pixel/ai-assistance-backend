@@ -10,3 +10,13 @@ export const pool = new Pool({
     rejectUnauthorized: false
   }
 });
+
+export const db = {
+  async getManuals() {
+    const result = await pool.query(
+      "SELECT * FROM manuals"
+    );
+
+    return result.rows;
+  }
+};
