@@ -70,7 +70,8 @@ if (!GEMINI_API_KEY) {
               const { rows } = await pool.query(
                 "SELECT * FROM intent_wording WHERE id = $1 LIMIT 1",[1]
               );
-              
+
+              console.log(rows);
               const data = rows[0];
 
             if (!data) {
