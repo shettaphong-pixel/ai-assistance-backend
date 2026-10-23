@@ -14,6 +14,8 @@ pool.query("SELECT NOW()")
   .catch((err) => {
     console.error("❌ Neon Connection Error:", err);
   });
+
+console.log(process.env.DATABASE_URL);
 //--- Finish Neon route ---//
 
 
