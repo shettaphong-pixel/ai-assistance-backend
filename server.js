@@ -6,6 +6,7 @@ import cors from "cors";
 
 //--- Connect Neon db ---//
 import { pool } from "./db.js";
+import { db } from "./db.js";
 
 pool.query("SELECT NOW()")
   .then(() => {
