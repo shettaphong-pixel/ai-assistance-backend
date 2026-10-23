@@ -4,6 +4,19 @@
 import express from "express";
 import cors from "cors";
 
+//--- Connect Neon db ---//
+import { pool } from "./db.js";
+
+pool.query("SELECT NOW()")
+  .then(() => {
+    console.log("✅ Neon Connected");
+  })
+  .catch((err) => {
+    console.error("❌ Neon Connection Error:", err);
+  });
+//--- Finish Neon route ---//
+
+
 // connect Supabase //
 import { createClient } from "@supabase/supabase-js";
 
@@ -30,24 +43,9 @@ let intentPatterns = {
 let manualsCache = [];
 
 async function refreshManuals() {
-   manualsCache = await getManuals();
+   manualsCache = await db.getManuals();
 }
 //finish
-
-async function getManuals() {
-  try {
-    const result = await pool.query(
-      "SELECT * FROM manuals"
-    );
-
-    const data = result.rows;
-
-    return data;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-}
 
 // ===========================
 // Config
@@ -408,7 +406,7 @@ async function saveAiQuestion(userText, result,intent) {
 
 app.get("/manuals", async (req, res) => {
 
-  const manuals = await getManuals();
+  const manuals = await db.getManuals();
 
   res.json(manuals);
 
@@ -586,7 +584,7 @@ app.post("/api/ai", async (req, res) => {
       });
     }
 
-const manuals = await getManuals();
+const manuals = await db.getManuals();
 
 const searchSource =
    recentText + " " + userText;
