@@ -726,7 +726,7 @@ console.log("Before LoadIntent");
 
 await loadIntentPatterns();
 
-consle.log("After LoadIntent");
+console.log("After LoadIntent");
 
 setInterval(async () => {
   console.log("Refreshing IntentPattern");
