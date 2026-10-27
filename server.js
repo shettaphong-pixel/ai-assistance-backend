@@ -69,7 +69,7 @@ if (!GEMINI_API_KEY) {
           async function loadIntentPatterns() {
             try {
 
-              console.log("Load Satrt");
+              console.log("Load Start");
               
               const { rows } = await pool.query(
                 "SELECT * FROM intent_wording WHERE id = $1 LIMIT 1",[1]
@@ -735,7 +735,7 @@ setInterval(async () => {
   console.log("INTERVAL FIRE");
   
   await loadIntentPatterns();
-}, 10000);
+}, 300000);
 
 const PORT = process.env.PORT || 5000;
 
