@@ -727,10 +727,16 @@ await loadIntentPatterns();
 
 console.log("After LoadIntent");
 
-setInterval(async () => {
-  console.log("Refreshing IntentPattern");
-  await loadIntentPatterns();
-}, 5 * 60 * 1000);
+// - trial - //
+setInterval(() => {
+  console.log("TEST", new Date());
+}, 10000);
+//-----//
+
+//setInterval(async () => {//
+//  console.log("Refreshing IntentPattern");//
+//  await loadIntentPatterns();//
+//}, 5 * 60 * 1000);//
 
 const PORT = process.env.PORT || 5000;
 
