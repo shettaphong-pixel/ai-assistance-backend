@@ -722,7 +722,7 @@ res.json({
 
 const PORT = process.env.PORT || 5000;
 
-consle.log("Before LoadIntent");
+console.log("Before LoadIntent");
 
 await loadIntentPatterns();
 
