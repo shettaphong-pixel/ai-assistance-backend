@@ -722,9 +722,14 @@ res.json({
 
 const PORT = process.env.PORT || 5000;
 
+consle.log("Before LoadIntent");
+
 await loadIntentPatterns();
 
+consle.log("After LoadIntent");
+
 setInterval(async () => {
+  console.log("Refreshing IntentPattern");
   await loadIntentPatterns();
 }, 5 * 60 * 1000);
 
