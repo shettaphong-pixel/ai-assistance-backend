@@ -604,18 +604,18 @@ const searchSource =
 const keywords =
   searchSource.toLowerCase().split(/\s+/);
 
-              const { Ekeywords_rows } = await pool.query(
-                "SELECT * FROM intent_wording WHERE id = $1 LIMIT 1",[1]
-              );
+              //const { Ekeywords_rows } = await pool.query(
+              //  "SELECT * FROM intent_wording WHERE id = $1 LIMIT 1",[1]
+              //);
     
-              const Ekeywordsdata = Ekeywords_rows[0];
+              //const Ekeywordsdata = Ekeywords_rows[0];
     
-const extraKeywords = Ekeywordsdata.Ekeywords_rows[0].extrakeywords
-  ?.split(',')
-  .map(x => x.trim())
-  .filter(Boolean) || [];
+//const extraKeywords = Ekeywordsdata.Ekeywords_rows[0].extrakeywords
+//  ?.split(',')
+//  .map(x => x.trim())
+//  .filter(Boolean) || [];
     
-//const extraKeywords = ["Apps","แนะนำ","recommended","recommend","Apps ปัจจุบันที่ QA เปิดให้ใช้งาน","Apps ทั้งหมด","แอปพลิเคชัน","application","program","โปรแกรม","รีพอต"];
+const extraKeywords = ["Apps","แนะนำ","recommended","recommend","Apps ปัจจุบันที่ QA เปิดให้ใช้งาน","Apps ทั้งหมด","แอปพลิเคชัน","application","program","โปรแกรม","รีพอต"];
 
 extraKeywords.forEach(word => {
 if (userText.toLowerCase().includes(word)) {
