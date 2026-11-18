@@ -599,7 +599,7 @@ const searchSource =
 const keywords =
   searchSource.toLowerCase().split(/\s+/);
 
-const extraKeywords = ["Apps","แนะนำ","recommended","recommend","Apps ปัจจุบันที่ QA เปิดให้ใช้งาน","Apps ทั้งหมด","แอปพลิเคชัน","application","program","โปรแกรม"];
+const extraKeywords = ["Apps","แนะนำ","recommended","recommend","Apps ปัจจุบันที่ QA เปิดให้ใช้งาน","Apps ทั้งหมด","แอปพลิเคชัน","application","program","โปรแกรม","รีพอต"];
 
 extraKeywords.forEach(word => {
 if (userText.toLowerCase().includes(word)) {
