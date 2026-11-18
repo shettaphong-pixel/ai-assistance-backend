@@ -106,7 +106,7 @@ if (!GEMINI_API_KEY) {
             ? data.conjuctions.split(",").map(x => x.trim())
             : [],
 
-            extrakeyword: data.extrakeyword
+            extrakeywords: data.extrakeywords
             ? data.extrakeywords.split(",").map(x => x.trim())
             : []
             };
