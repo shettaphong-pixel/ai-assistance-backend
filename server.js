@@ -39,7 +39,8 @@ let intentPatterns = {
       startfeedback: [],
       givefeedback: [],
       directfeedback: [],
-      conjuctions:[]
+      conjuctions:[],
+      extrakeywords:[]
 };
 
 //add
@@ -599,7 +600,12 @@ const searchSource =
 const keywords =
   searchSource.toLowerCase().split(/\s+/);
 
-const extraKeywords = ["Apps","แนะนำ","recommended","recommend","Apps ปัจจุบันที่ QA เปิดให้ใช้งาน","Apps ทั้งหมด","แอปพลิเคชัน","application","program","โปรแกรม","รีพอต"];
+const extraKeywords = data.rows[0].extrakeywords
+  ?.split(',')
+  .map(x => x.trim())
+  .filter(Boolean) || [];
+    
+//const extraKeywords = ["Apps","แนะนำ","recommended","recommend","Apps ปัจจุบันที่ QA เปิดให้ใช้งาน","Apps ทั้งหมด","แอปพลิเคชัน","application","program","โปรแกรม","รีพอต"];
 
 extraKeywords.forEach(word => {
 if (userText.toLowerCase().includes(word)) {
