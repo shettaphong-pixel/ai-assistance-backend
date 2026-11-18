@@ -604,7 +604,15 @@ const searchSource =
 const keywords =
   searchSource.toLowerCase().split(/\s+/);
 
-const extraKeywords = data.rows[0].extrakeywords
+              const { Ekeywords_rows } = await pool.query(
+                "SELECT * FROM intent_wording WHERE id = $1 LIMIT 1",[1]
+              );
+
+              console.log("Ekeywords :",Ekeywords_rows.length);
+              
+              const Ekeywordsdata = Ekeywords_rows[0];
+    
+const extraKeywords = Ekeywordsdata.Ekeywords_rows[0].extrakeywords
   ?.split(',')
   .map(x => x.trim())
   .filter(Boolean) || [];
