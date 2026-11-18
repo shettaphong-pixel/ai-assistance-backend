@@ -607,9 +607,7 @@ const keywords =
               const { Ekeywords_rows } = await pool.query(
                 "SELECT * FROM intent_wording WHERE id = $1 LIMIT 1",[1]
               );
-
-              console.log("Ekeywords :",Ekeywords_rows.length);
-              
+    
               const Ekeywordsdata = Ekeywords_rows[0];
     
 const extraKeywords = Ekeywordsdata.Ekeywords_rows[0].extrakeywords
