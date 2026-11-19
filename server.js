@@ -405,7 +405,7 @@ async function saveAiQuestion(userText, result,intent) {
         `,
       [
         userText,
-        answer,
+        result,
         intent
       ]
       );
