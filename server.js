@@ -392,15 +392,34 @@ app.get("/", (req, res) => {
 // ===========================
 
 async function saveAiQuestion(userText, result,intent) {
-   
-  const { error } = await supabase
-    .from("ai_hits")
-    .insert({
-      question: userText,
-      answer: result,
-      intent: intent
-       
-    });
+
+      //=== Use Neon Database ===//
+      await pool.query(
+        `
+          INSERT INTO ai_hits (
+            question,
+            answer,
+            intent
+          )
+          VALUES ($1, $2, $3)
+        `,
+      [
+        userText,
+        answer,
+        intent
+      ]
+      );
+      //=============================//
+
+  //=== Use Supabase Database ===//
+  //const { error } = await supabase
+  //  .from("ai_hits")
+  //  .insert({
+  //    question: userText,
+  //    answer: result,
+  //    intent: intent     
+  //  });
+  //=============================//
 
   if (error) {
     console.error(
