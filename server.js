@@ -572,14 +572,30 @@ app.post("/api/ai", async (req, res) => {
    // ===========================
 
    async function saveFeedback(userText,answer,intent) {
-  
-      const { error } = await supabase
-       .from("ai_hits")
-       .insert({
-         question : userText,
-         answer : answer,
-         intent : intent
-       });
+
+      const { error } = await pool.query(
+        `
+          INSERT INTO ai_hits (
+            question,
+            answer,
+            intent
+          )
+          VALUES ($1, $2, $3)
+        `,
+      [
+        userText,
+        answer,
+        intent
+      ]
+      );
+     
+      //const { error } = await supabase
+      // .from("ai_hits")
+      // .insert({
+      //   question : userText,
+      //   answer : answer,
+      //   intent : intent
+      // });
 
      if (error) {
        console.error(
