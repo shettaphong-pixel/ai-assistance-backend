@@ -394,7 +394,7 @@ app.get("/", (req, res) => {
 async function saveAiQuestion(userText, result,intent) {
 
       //=== Use Neon Database ===//
-      await pool.query(
+      const { error } = await pool.query(
         `
           INSERT INTO ai_hits (
             question,
@@ -593,7 +593,7 @@ app.post("/api/ai", async (req, res) => {
    async function saveFeedback(userText,answer,intent) {
 
      //=== Use Neon Database ===//
-      await pool.query(
+      const { error } = await pool.query(
         `
           INSERT INTO ai_hits (
             question,
