@@ -573,7 +573,8 @@ app.post("/api/ai", async (req, res) => {
 
    async function saveFeedback(userText,answer,intent) {
 
-      const { error } = await pool.query(
+     //=== Use Neon Database ===//
+      await pool.query(
         `
           INSERT INTO ai_hits (
             question,
@@ -588,7 +589,9 @@ app.post("/api/ai", async (req, res) => {
         intent
       ]
       );
+      //=============================//
      
+     //=== Use Supabase Database ===//
       //const { error } = await supabase
       // .from("ai_hits")
       // .insert({
@@ -596,7 +599,8 @@ app.post("/api/ai", async (req, res) => {
       //   answer : answer,
       //   intent : intent
       // });
-
+      //=============================//
+     
      if (error) {
        console.error(
          "Save AI Question Error:",
